@@ -1,0 +1,157 @@
+\section{Introduction}
+
+
+Modeling interconnected entities as graphs (or networks)
+allows us study the global structure and function of a system,
+instead of looking at single entities in isolation.
+The understanding of the structure of a network in a holistic way
+can be further supported by our ability to 
+understand the \emph{role} of a single vertex 
+with respect to its local neighborhood, 
+or with respect to the whole network.
+Accordingly, 
+\emph{role discovery} 
+has emerged as an important
+graph-mining task~\cite{gilpin2013guided,danilevsky2013entity,henderson2012rolx,rossi2015role,ruan2014simultaneous,yang2015network,zhao2013inferring}, 
+together with other standard graph-mining problems, 
+such as community detection, link prediction,  etc.
+
+Role discovery can be a valuable tool for exploratory graph mining. 
+For instance, identifying the role of person in a social network 
+may provide cues for understanding the social behavior of the person
+in relation to her peers. 
+Similarly, identifying the role of a vertex in a technological network 
+may give useful information about the function of the vertex in the network, 
+or it may be used to detect anomalies~\cite{rossi2013multi}.
+In fact, Rossi and Ahmed~\cite{rossi2015role}
+provide an extensive and well-documented list of graph-mining tasks
+that can be facilitated by role discovery. 
+The list includes applications such as 
+classification, active learning, graph visualization, 
+transfer learning, graph compression, entity resolution, and more.
+
+% Not really needed, if we are low on space
+Role discovery can be seen as a process that
+partitions the vertices of a graph into equivalence classes.
+Nodes in the same class are assigned to the same role. 
+Equivalence classes are typically
+aiming at capturing the structural relation between the vertices and their neighbors. 
+In this way roles can represent 
+structural patterns in the graph, 
+such as, star centers, bridges, peripheral vertices, vertices in near-cliques, etc.~\cite{henderson2012rolx}.
+
+Many different approaches have been proposed
+for defining when two vertices should be considered equivalent and, thus,  
+should be assigned to the same role. 
+Some of the first methods proposed in mathematical sociology
+rely on identifying structural or automorphic equivalence 
+classes~\cite{everett1994regular,lorrain1971structural}, 
+while newer methods 
+represent vertices by feature vectors 
+and assign to the same role vertices with similar 
+feature vectors~\cite{henderson2012rolx,rossi2015role,rossi2013modeling,zhao2013inferring}.
+
+An attractive definition for 
+discovering roles in networks is based on the concept of
+\emph{regular equivalence}~\cite{everett1994regular,white1983graph}:
+According to regular equivalence, 
+two vertices should be assigned to the same role
+only if their neighbors have the same roles, ignoring multiplicities.
+For example, 
+for the collaboration network of a company
+we may discover 
+that vertices with role $A$ (``project manager'')
+are connected to vertices with role 
+$B$ (``business analyst'') and $C$ (``s/w developer''), 
+while vertices with roles $B$ and $C$ are typically not connected to each other. 
+
+In this paper we present a new approach to role discovery, 
+inspired by the definition of regular equivalence.
+As the original definition is too strict to be of use in real-world datasets, 
+we provide a \emph{relaxation} that provides robustness and can tolerate noise in the data.
+In particular, we define an objective function that quantifies
+the degree to which a given role assignment 
+satisfies regular equivalence.
+Given a target number of roles $k$
+we then ask to find the role assignment that minimizes our objective function.
+We also take multiplicities into account: a vertex with 100 neighbors having role $A$
+is treated differently than a vertex with a single neighbor having role $A$.
+
+\input{grooming}
+
+The proposed objective function is based on creating a \emph{profile} for each vertex, 
+which represents the number of neighbor vertices for each other role.
+Thus, vertices with the same role should have similar profiles.
+This requirement is expressed as a $k$-means-type squared-error function. 
+The approach resembles feature-based methods,
+however, the important difference is the recursive nature of our definition: 
+\emph{roles depend on profiles and profiles depend on roles}. 
+
+An example of the roles discovered in a grooming network
+of monkeys, Rhesus Macaques, 
+is shown in Figure~\ref{figure:grooming}. 
+In this example we search for $k=3$ roles. 
+The role assignment is depicted with different colors, 
+and the profile centroids for each role are shown in the bottom-right subplot.
+We see that the first role ({\tt purple}) corresponds to relatively isolated individuals, 
+while the other two roles ({\tt green} and {\tt orange}) correspond to more central ones. 
+Observe that the {\tt green} role is indeed different than the {\tt orange} role,
+as the individuals of the {\tt orange} role are connected to more individuals of the {\tt purple} role, 
+and they are not connected to each other. 
+In the upper-right subplot we show a scatter-plot of role vs.\ degree. 
+We see that one of the two vertices with {\tt orange} role
+has smaller no larger degree than five of the vertices with {\tt green} role, 
+indicating that the role assignment we discover cannot be explained solely by degree. 
+
+
+Our technical contributions are as follows: we formulate the optimization
+problem and demonstrate that this problem is \np-hard. Furthermore, we show
+that if we fix the profile centroids, 
+the problem still remains \np-hard, and 
+cannot be approximated.
+On the positive side, we show that discovering a \emph{perfect}
+role assignment, that is, a role assignment with $0$ cost, with smallest number
+of roles $k$ can be done efficiently in polynomial time. We further propose two
+natural heuristic algorithms for minimizing the cost function when $k$ is fixed: 
+($i$) the first method is
+a greedy hill-climbing algorithm, where we optimize a role for a single
+vertex while keeping the remaining vertex roles constant,
+($ii$) in the second approach we first fix the profiles, transforming
+the problem into a standard clustering problem, that we solve using $k$-means algorithm,
+and compute the new profiles from the obtained clustering.
+
+We have benchmarked the proposed methods
+on eight different real-world datasets of varying size.
+With respect to optimization score
+the greedy hill-climbing algorithm is found to perform better 
+than the iterative ($k$-means-like) algorithm.
+This is consistent for many different initialization strategies, 
+but interestingly enough, 
+the best performance is achieved when greedy is initialized with the solution found by the iterative.
+
+We have also contrasted our methods with
+\algrolx~\cite{henderson2012rolx}, 
+a representative feature-based algorithm.
+Direct comparison is not easy, 
+as there is no available ground truth for the role-discovery problem, 
+and as the \algrolx algorithm does not provide an optimization criterion.
+Nevertheless, we find that, when measured with our objective function, 
+\algrolx obtains high-cost solutions.
+Compared as a neutral classification task,
+where the aim is to predict the discovered roles by the corresponding features, 
+the iterative algorithm achieves the highest accuracy.
+
+The rest of this paper is organized as follows.
+We present related work in Section~\ref{section:related}.
+We discuss the preliminaries and define the problem in Section~\ref{sec:prel}.
+In Section~\ref{section:perfect} we present algorithm for perfect role assignments,
+and in Sections~\ref{section:greedy}--\ref{sec:kmeans} we present our discovery algorithms.
+Section~\ref{sec:exp} is devoted for experimental evaluation, and we conclude the paper with discussion in Section~\ref{sec:conclusions}.
+
+
+
+
+%\note{Decide whether we talk for ``nodes'' or ``vertices''.} I went with vertices
+
+
+

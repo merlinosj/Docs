@@ -1,0 +1,25 @@
+\section{Concluding remarks}
+\label{sec:conclusions}
+
+In this paper we propose a new type of role discovery optimization problem.  We
+propose that the vertices should have the same role if their profiles, role
+counts of neighbors, are similar.
+
+From technical point, our method is different than feature-based techniques
+because our features are in fact roles of neighbors. Hence, a two-step
+approach---($i$) construct features and ($ii$) cluster roles from
+features---does not work. This intricate dependency makes the optimization
+problem difficult: we show that the problem is \np-hard, and cannot be even approximated if we fix the
+centroids for the roles.
+
+On the positive side we show that we can discover the perfect, zero-cost,
+solution with minimal number of roles efficiently in polynomial time. When the
+number of roles is fixed, we propose two simple natural heuristics: iterative
+optimization and a hill-climbing algorithm.
+
+Interestingly enough, we do not directly use any network-based feature when
+comparing vertices. Instead, we are only interested in role counts. Our logic
+is that fundamentally different ego-networks for vertices, say, $u$ and $v$,
+should result in different role counts which should imply that $u$ and $v$ are
+different. Nevertheless, combining our approach with other feature-based role
+discovery methods provides a potentially fruitful direction for future work. 

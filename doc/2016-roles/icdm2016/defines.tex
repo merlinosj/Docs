@@ -1,0 +1,201 @@
+
+%% Data names
+\newcommand{\dtname}[1]{\textsl{#1}}
+\newcommand{\dolphins}{\dtname{dolphins}\xspace}
+\newcommand{\karate}{\dtname{karate}\xspace}
+\newcommand{\lesmis}{\dtname{lesmis}\xspace}
+\newcommand{\astro}{\dtname{astro}\xspace}
+\newcommand{\enron}{\dtname{enron}\xspace}
+\newcommand{\facebook}{\dtname{facebook}\xspace}
+\newcommand{\EUall}{\dtname{EUall}\xspace}
+\newcommand{\dblp}{\dtname{dblp}\xspace}
+\newcommand{\youtube}{\dtname{youtube}\xspace}
+\newcommand{\roadnet}{\dtname{roadnet}\xspace}
+\newcommand{\skitter}{\dtname{skitter}\xspace}
+
+\newcommand{\exact}{\textsc{Exact}\xspace}
+\newcommand{\hillclimb}{\textsc{Hill Climb}\xspace}
+\newcommand{\kmeans}{\textsc{K-Means}\xspace}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{problem}[theorem]{Problem}
+
+
+
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\pr}[1]{\left(#1\right)}
+\newcommand{\fpr}[1]{\mathopen{}\left(#1\right)}
+\newcommand{\spr}[1]{\left[#1\right]}
+\newcommand{\fspr}[1]{\mathopen{}\left[#1\right]}
+\newcommand{\brak}[1]{\left<#1\right>}
+\newcommand{\abs}[1]{{\left|#1\right|}}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\enset}[2]{\left\{#1 ,\ldots , #2\right\}}
+\newcommand{\enpr}[2]{\pr{#1 ,\ldots , #2}}
+\newcommand{\enlst}[2]{{#1} ,\ldots , {#2}}
+% \newcommand{\vect}[1]{\spr{#1}}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\envec}[2]{\vect{#1 ,\ldots , #2}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\np}{\textbf{NP}}
+\newcommand{\poly}{\textbf{P}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\funcdef}[3]{{#1}:{#2} \to {#3}}
+\newcommand{\define}{\leftarrow}
+\newcommand{\reals}{{\mathbb{R}}}
+\newcommand{\dg}[1]{\dispfunc{\mathrm{deg}}{#1}}
+\newcommand{\bigO}[1]{\dispfunc{\mathcal{O}}{#1}}
+\newcommand{\role}{r}
+\newcommand{\prof}[1]{\dispfunc{\vect{p}}{#1}}
+\newcommand{\centroid}{\vect{c}}
+\newcommand{\centroidcoord}{{c}}
+\newcommand{\dist}[1]{\dispfunc{d}{#1}}
+\newcommand{\elltwo}[1]{\dispfunc{\ell_2}{#1}}
+\newcommand{\cost}[1]{\dispfunc{c}{#1}}
+\newcommand{\gain}[1]{\dispfunc{\mathrm{gain}}{#1}}
+\newcommand{\nbhdg}[1]{\dispfunc{\mathrm{ng}}{#1}}
+
+
+\newcommand{\fm}[1]{{\mathcal{#1}}}
+
+\DeclareRobustCommand{\dispfunc}[2]{%
+	\ensuremath{%
+		\ifthenelse{\equal{#2}{}}%
+			{\mathit{#1}}%
+			{\mathit{#1}\fpr{#2}}}}
+
+\newcommand{\prbrm}{\textsc{Roles}\xspace}
+\newcommand{\prbrmfixed}{\textsc{Roles-Fixed\-Centroids}\xspace}
+\newcommand{\tmatch}{\textsc{3D-Matching}\xspace}
+\newcommand{\tsat}{\textsc{3-Sat}\xspace}
+\newcommand{\tuples}{\textsc{Tuples}\xspace}
+\newcommand{\algperfect}{\textsc{Perfect}\xspace}
+\newcommand{\alggreedy}{\textsc{Greedy}\xspace}
+\newcommand{\algiterative}{\textsc{Iterative}\xspace}
+\newcommand{\algcluster}{\textsc{Cluster}\xspace}
+\newcommand{\algkm}{\textsc{itr}\xspace}
+\newcommand{\algrolx}{\textsc{RolX}\xspace}
+
+\newcommand{\alginitdeg}{\textsc{deg}\xspace}
+\newcommand{\alginitrnd}{\textsc{rnd}\xspace}
+\newcommand{\alginitone}{\textsc{one}\xspace}
+\newcommand{\alginitkm}{\textsc{i+g}\xspace}
+
+%% editing macros
+\newcommand{\para}[1]{\noindent{\bf{#1}}}
+\newcommand{\spara}[1]{\smallskip\noindent{\bf{#1}}}
+\newcommand{\mpara}[1]{\medskip\noindent{\bf{#1}}}
+\newcommand{\bpara}[1]{\bigskip\noindent{\bf{#1}}}
+
+
+% PGF stuff
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+
+\definecolor{yafaxiscolor}{rgb}{0.3, 0.3, 0.3}
+
+\definecolor{yafcolor1}{rgb}{0.4, 0.165, 0.553}
+\definecolor{yafcolor2}{rgb}{0.949, 0.482, 0.216}
+\definecolor{yafcolor3}{rgb}{0.47, 0.549, 0.306}
+\definecolor{yafcolor4}{rgb}{0.925, 0.165, 0.224}
+\definecolor{yafcolor5}{rgb}{0.141, 0.345, 0.643}
+\definecolor{yafcolor6}{rgb}{0.965, 0.933, 0.267}
+\definecolor{yafcolor7}{rgb}{0.627, 0.118, 0.165}
+\definecolor{yafcolor8}{rgb}{0.878, 0.475, 0.686}
+
+
+
+\tikzstyle{graphedge} = [black, thick, opacity = 0.5, bend left = 10]
+\tikzstyle{graphnode} = [circle, draw, line width = 1pt, text = black, inner sep = 0.5pt, text width = 7pt, align = center]
+\tikzstyle{graphcl1} = [yafcolor1, fill = yafcolor1!10]
+\tikzstyle{graphcl2} = [yafcolor3, fill = yafcolor3!10]
+\tikzstyle{graphcl3} = [yafcolor2, fill = yafcolor2!10]
+
+
+
+
+
+
+
+\newlength{\yafaxispad}
+\setlength{\yafaxispad}{-4pt}
+\newlength{\yaftlpad}
+\setlength{\yaftlpad}{\yafaxispad}
+\addtolength{\yaftlpad}{-0pt}
+\newlength{\yaflabelpad}
+\setlength{\yaflabelpad}{-2pt}
+\newlength{\yafaxiswidth}
+\setlength{\yafaxiswidth}{1.2pt}
+\newlength{\yafticklen}
+\setlength{\yafticklen}{2pt}
+
+\makeatletter
+\def\pgfplots@drawtickgridlines@INSTALLCLIP@onorientedsurf#1{}
+\makeatother
+
+\newcommand{\yafdrawxaxis}[2]{
+	\pgfplotstransformcoordinatex{#1}\let\xmincoord=\pgfmathresult 
+	\pgfplotstransformcoordinatex{#2}\let\xmaxcoord=\pgfmathresult 
+	\pgfsetlinewidth{\yafaxiswidth} 
+	\pgfsetcolor{yafaxiscolor}
+	\pgfpathmoveto{\pgfpointadd{\pgfpointadd{\pgfplotspointrelaxisxy{0}{0}}{\pgfqpointxy{\xmincoord}{0}}}{\pgfqpoint{-0.5\yafaxiswidth}{\yafaxispad}}}
+	\pgfpathlineto{\pgfpointadd{\pgfpointadd{\pgfplotspointrelaxisxy{0}{0}}{\pgfqpointxy{\xmaxcoord}{0}}}{\pgfqpoint{0.5\yafaxiswidth}{\yafaxispad}}}
+	\pgfusepath{stroke}
+
+}
+\newcommand{\yafdrawyaxis}[2]{
+	\pgfplotstransformcoordinatey{#1}\let\ymincoord=\pgfmathresult 
+	\pgfplotstransformcoordinatey{#2}\let\ymaxcoord=\pgfmathresult 
+	\pgfsetlinewidth{\yafaxiswidth} 
+	\pgfsetcolor{yafaxiscolor}
+	\pgfpathmoveto{\pgfpointadd{\pgfpointadd{\pgfplotspointrelaxisxy{0}{0}}{\pgfqpointxy{0}{\ymincoord}}}{\pgfqpoint{\yafaxispad}{-0.5\yafaxiswidth}}}
+	\pgfpathlineto{\pgfpointadd{\pgfpointadd{\pgfplotspointrelaxisxy{0}{0}}{\pgfqpointxy{0}{\ymaxcoord}}}{\pgfqpoint{\yafaxispad}{0.5\yafaxiswidth}}}
+	\pgfusepath{stroke}
+}
+
+\newcommand{\yafdrawaxis}[4]{\yafdrawxaxis{#1}{#2}\yafdrawyaxis{#3}{#4}}
+
+\pgfplotscreateplotcyclelist{yaf}{% 
+{yafcolor1,mark options={scale=0.75},mark=o}, 
+{yafcolor2,mark options={scale=0.75},mark=square},
+{yafcolor3,mark options={scale=0.75},mark=triangle},
+{yafcolor4,mark options={scale=0.75},mark=o},
+{yafcolor5,mark options={scale=0.75},mark=o},
+{yafcolor6,mark options={scale=0.75},mark=o},
+{yafcolor7,mark options={scale=0.75},mark=o},
+{yafcolor8,mark options={scale=0.75},mark=o}} 
+
+\pgfplotsset{axis y line=left, axis x line=bottom,
+	tick align=outside,
+	compat = 1.3,
+	tickwidth=\yafticklen,
+	clip = false,
+	every axis title shift = 0pt,
+    x axis line style= {-, line width = 0pt, opacity = 0},
+    y axis line style= {-, line width = 0pt, opacity = 0},
+    x tick style= {line width = \yafaxiswidth, color=yafaxiscolor, yshift = \yafaxispad},
+    y tick style= {line width = \yafaxiswidth, color=yafaxiscolor, xshift = \yafaxispad},
+    x tick label style = {font=\scriptsize, yshift = \yaftlpad},
+    y tick label style = {font=\scriptsize, xshift = \yaftlpad},
+    every axis y label/.style = {at = {(ticklabel cs:0.5)}, rotate=90, anchor=center, font=\scriptsize, yshift = -\yaflabelpad},
+    every axis x label/.style = {at = {(ticklabel cs:0.5)}, anchor=center, font=\scriptsize, yshift = \yaflabelpad},
+    x tick label style = {font=\scriptsize, yshift = 1pt},
+    grid = major,
+    major grid style  = {dash pattern = on 1pt off 3 pt},
+	every axis plot post/.append style= {line width=\yafaxiswidth} ,
+	legend cell align = left,
+	legend style = {inner sep = 1pt, cells = {font=\scriptsize}},
+	legend image code/.code={%
+		\draw[mark repeat=2,mark phase=2,#1] 
+		plot coordinates { (0cm,0cm) (0.15cm,0cm) (0.3cm,0cm) };% 
+	} 
+}
