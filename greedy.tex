@@ -1,0 +1,181 @@
+\section{Hill-climbing algorithm}
+\label{section:greedy}
+
+The algorithm discussed in the previous section
+returns a perfect (zero-cost) role assignment
+but it does not put any constraint on the number of roles to be used.
+In fact, as we will see in the experimental section, 
+in most cases, \algperfect is forced to use a large number of roles. 
+This is an expected behavior, 
+as the requirement for a perfect role assignment is too rigid.
+
+In this section, we return to the \prbrm problem
+(defined in Problem~\ref{problem:role-mining})
+and ask to find a minimum-cost role assignment
+for a given number of roles $k$.
+As the \prbrm problem is \np-hard (Proposition~\ref{proposition:np}) and
+as a simple variant of the problem is \np-hard to approximate (Proposition~\ref{proposition:np-fixed}), 
+we present a hill-climbing algorithm
+that iteratively improves the cost of the role-assignment problem, 
+until convergence.
+The algorithm is presented and analyzed below.
+
+Assume a role assignment $\role$ with optimal centroids $\centroid$. 
+Let $v$ be a vertex, and let $j$ be an integer.
+Define a new role assignment $\role'$ obtained from $\role$ by setting $\role'(v) = j$.
+Let $\centroid'$ be the optimal centroids with respect to $\role'$.
+
+We define the \emph{gain} to be the difference
+of the value of the objective function for the two role assignments 
+\[
+\gain{v, j; \role} = 
+	\sum_{v \in V} \dist{v, \centroid_{\role(v)}; \role} - \sum_{v \in V} \dist{v, \centroid'_{\role'(v)}; \role'}.
+\]
+A positive gain means that $\role'$ produces a smaller cost, making it better.
+
+\iffalse
+i -> j
+\[
+	- c_i\norm{\centroid_i}^2 + (c_i - 1)\norm{\centroid_i'}^2
+	+ c_j\norm{\centroid_j}^2 - (c_i + 1)\norm{\centroid_j'}^2
+\]
+
+\[
+	+ \prof{w}_i^2  -  (\prof{w}_i - 1)^2
+	- \prof{w}_j^2  +  (\prof{w}_j - 1)^2
+\]
+
+\[
+	2\prof{w}_i - 2\prof{w}_j 
+\]
+
+\[
+	-c_\ell ((\centroid_\ell)^2_i - (\centroid_\ell')^2_i
+	-(\centroid_\ell)^2_j + (\centroid_\ell')^2_j)
+\]
+
+\[
+	- 2(\centroid_\ell)_i  + 2(\centroid_\ell)_j  
+\]
+\fi
+
+The proposed hill-climbing algorithm,
+named \alggreedy, 
+is illustrated as Algorithm~\ref{alg:greedy}. 
+The algorithm starts with an initial role assignment {\role}.
+Then it sequentially tries to improve the score by change the role of each vertex in the graph.
+For each vertex $v$, it changes its assignment to the role $j$
+that maximizes the gain $\gain{v, j}$. 
+If there is no role that yields a positive gain, 
+the role of $v$ remains unchanged.
+
+\begin{algorithm}[t]
+\caption{$\alggreedy(G, k, r_{\mathit{init}})$, hill-climbing algorithm.}
+\label{alg:greedy}
+initialize role assignment, $\role \define r_{\mathit{init}}$\; 
+\While {changes} {
+	\ForEach {$v \in V$} {
+		$j^* \define \arg \max_j \gain{v, j}$\;
+		\If {$\gain{v, j^*} > 0$} {
+			update $\role$\;
+			update profiles and centroids\;
+		}
+	}
+}
+\end{algorithm}
+
+For selecting the initial role assignment
+we have experimented with a number of different strategies. 
+More details are given in the experimental section.
+
+As \alggreedy involves a number of nested loops, 
+a na\"{i}ve implementation will make it prohibitively expensive for large networks.
+However, we show that it is possible to implement \alggreedy 
+in a much more efficient manner
+so that the running time of the inner-most loop
+({\bf foreach} loop in Algorithm~\ref{alg:greedy}) 
+is linear in the size of the graph, 
+and quadratic only in the number of roles $k$, 
+which in practice can be assumed to be a very small constant.
+
+\begin{proposition}
+\label{prop:fastgain}
+Assume a role assignment $\role$ with optimal centroids $\centroid$. 
+Let $v$ be a vertex and $j$ be an integer.
+Let $i = \role(v)$.
+Define $n_\ell = \abs{\set{u \in V ; \role(u) = \ell}}$ to be the number of vertices having role $\ell$.
+Define $d_\ell = \abs{\set{(v, w) \in E ; \role(w) = \ell}}$ to be the number of neighbors of $v$ having role $\ell$.
+
+Define a new role assignment $\role'$ obtained from $\role$ by setting $\role'(v) = j$.
+Let $n'_\ell = \abs{\set{u \in V ; \role'(u) = \ell}}$.
+Let $\centroid'$ be the optimal centroids with respect to $\role'$. 
+Let $\centroid^*$ be the ``intermediate'' centroids, where we have moved $v$ from $i$ to $j$ but we have not
+updated the profiles of neighbors of $v$.  Then 
+\[
+\begin{split}
+	\gain{v, j} = 
+	& - n_i\norm{\centroid_i}^2 + n_i'\norm{\centroid_i^*}^2 - n_j\norm{\centroid_j}^2 + n_j'\norm{\centroid_j^*}^2 \\
+	& + \sum_{(v, w) \in E} 2\prof{w, \role}_i - 2\prof{w, \role}_j  - 2  \\
+	& - \sum_{\ell = 1}^k 2d_\ell \spr{(\centroid_\ell^*)_j  - (\centroid_\ell^*)_i - d_\ell / n_\ell' }.  \\
+\end{split}
+\]
+\end{proposition}
+
+\begin{proof}
+A known identity $\sum (x_i - \centroid)^2 = \sum (x_i^2 - \centroid^2)$ allows us to 
+rewrite the gain as
+\[
+\begin{split}
+	\gain{v, j} = & \sum_{u \in V} \norm{\prof{u, \role}}^2 -  \norm{\prof{u, \role'}}^2 \\
+	& - \sum_{\ell = 1}^k n_\ell \norm{\centroid_\ell}^2 -  n_\ell' \norm{\centroid_\ell'}^2.
+\end{split}
+\]
+Let us define $B(w)$ to be a term in the first sum.
+Let us abbreviate $\prof{w, \role}$ as $\prof{w}$.
+Then $B(w) \neq 0$ if and only if $(v, w) \in E$,
+and in such a case it is equal to
+\[
+\begin{split}
+	B(w) & = \prof{w}_i^2 - (\prof{w}_i - 1)^2 + \prof{w}_j^2 - (\prof{w}_j + 1)^2 \\
+	& = 2\prof{w}_i - 2\prof{w}_j  - 2.
+\end{split}
+\]
+We now consider the second sum, which we will rewrite as
+\[
+	\sum_{\ell = 1}^k n_\ell \norm{\centroid_\ell}^2 -  n_\ell' \norm{\centroid_\ell^*}^2 +
+	\sum_{\ell = 1}^k n_\ell' \norm{\centroid_\ell^*}^2 -  n_\ell' \norm{\centroid_\ell'}^2.
+\]
+The first sum, which we will denote by $A$ is equal to
+\[
+	A = n_i\norm{\centroid_i}^2 - n_i'\norm{\centroid_i^*}^2 + n_j\norm{\centroid_j}^2 - n_j'\norm{\centroid_j^*}^2. 
+\]
+
+Let us write $R(\ell)$ to be a term in the second sum. We can express this term as
+\[
+\begin{split}
+	R(\ell) & = n_\ell'\spr{(\centroid_\ell^*)_i^2 - ((\centroid_\ell^*)_i - \gamma_\ell)^2 + (\centroid_\ell^*)_j^2 - ((\centroid_\ell^*)_j +  \gamma_\ell)^2} \\
+	        & = 2d_\ell \spr{(\centroid_\ell^*)_i - (\centroid_\ell^*)_j -  \gamma_\ell}, \quad \text{where} \quad \gamma_\ell = d_\ell / n_\ell'.
+\end{split}
+\]
+To conclude, we have
+\[
+	\gain{v, j} = - A + \sum_{(v, w) \in E} B(w) - \sum_{\ell = 1}^k R(\ell),
+\]
+which proves the identity.
+\end{proof}
+
+
+
+\begin{proposition}
+The inner loop of \alggreedy
+\emph{(}{\bf foreach} loop in Algorithm~\ref{alg:greedy}\emph{)} 
+requires time $\bigO{nk^2 + km}$.
+\end{proposition}
+
+\begin{proof}
+According to Proposition~\ref{prop:fastgain}, computing the gain can be done in time $\bigO{k + \dg{v}}$. 
+Consequently, computing $j^*$ requires time $\bigO{k^2 + k\dg{v}}$. 
+Updating the profiles, the centroids, and the role assignment $\role$
+can be done in time $\bigO{k + \dg{v}}$. 
+Summing over all the vertices gives us a total running time of $\bigO{nk^2 + km}$.
+\end{proof}

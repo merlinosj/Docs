@@ -1,0 +1,256 @@
+\section{A polynomial algorithm for\\perfect role assignment}
+\label{section:perfect}
+
+
+Before presenting our proposed algorithms for the \prbrm problem, 
+we first present a polynomial algorithm
+for finding a perfect role assignment --- a solution with cost zero. 
+In the light of the previous \np-hardness results, 
+this polynomial algorithm appears somewhat surprising. 
+Note however, that this polynomial algorithm 
+guarantees to find the minimum number of roles for which there is a solution of cost zero. 
+This is a different question than the one posed by the \prbrm problem, 
+where we aim to find a minimum-cost solution for a given number of roles.
+
+The polynomial algorithm, named \algperfect, 
+works by first setting $k=1$ and assigning all vertices to the same role. 
+Then, it iteratively computes the profile of each vertex, 
+and groups together all vertices with the same profile. 
+For each new group it then assigns a new role (and increases $k$), 
+and the iterative process continues as long as new roles are created. 
+Pseudocode for \algperfect is given in Algorithm~\ref{alg:perfect}.
+
+\begin{algorithm}[t]
+\caption{$\algperfect(G)$, computes a perfect assignment with smallest number of roles.}
+\label{alg:perfect}
+	$\role(v) \define 1$ for every $v \in V$\;
+	\While {number of roles increases} {
+		compute profiles $\prof{v; \role}$\;
+		group vertices with the same profiles\;
+		assign a role to each group\;
+	}
+\end{algorithm}
+
+Note that in the first iteration of \algperfect
+the profile of each vertex $v$ is a scalar (1-dimensional vector) 
+equal to the degree of the vertex.
+Thus, during this first iteration
+all vertices with the same degree will be grouped together and will be assigned the same role. 
+In subsequent iterations the vertices with the same degree
+will be potentially further subdivided to smaller groups, 
+and vertices within a group are assigned to the same role. 
+
+As the number of roles can only increase during the execution of \algperfect, 
+the previous observation implies that \algperfect 
+always returns a solution in which the number of roles $k$ is
+at least as large as the number of distinct degrees in the graph. 
+To verify this property, 
+notice that it is not possible to obtain a perfect role assignment
+with a smaller number of roles than the number of distinct degrees. 
+
+Finally, note that the \algperfect algorithm always terminates, 
+in the worst case when $k=n$ and each vertex is assigned to a unique role.
+
+The main claim characterizing the optimality of the \algperfect algorithm
+is formulated in the following proposition.
+
+\begin{proposition}
+\label{prop:perfectcorrect}
+Algorithm~\ref{alg:perfect} converges in $\bigO{n}$ iterations. 
+The role assignment returned by the algorithm  
+provides a zero-cost solution, 
+and has the smallest possible number of roles.
+\end{proposition}
+
+To prove the proposition, we will introduce a \emph{partial order} 
+relationship between 
+role-assignment functions:  
+Given two role assignments $\role$ and $\role'$, we say that $\role$ is a
+\emph{refinement} of~$\role'$ if $\role(v) = \role(w)$ implies $\role'(v) =
+\role'(w)$. We will denote this relationship by $\role \preceq \role'$.
+
+The following lemma describes the relationship between the profiles of refined role assignments.
+
+\begin{lemma}
+\label{lem:refineprofile}
+Let $\role$ and $\role'$ be two role assignments such that $\role \preceq \role'$.
+Consider two vertices % $v$ and $w$ 
+with $\prof{v, \role} = \prof{w, \role}$. 
+Then $\prof{v; \role'} = \prof{w; \role'}$.
+\end{lemma}
+
+\begin{IEEEproof}
+Let $A = \set{\role(u); u \in V}$ and $A' = \set{\role'(u); u \in V}$ be the
+possible role values in the two role assignments. 
+Let $i \in A$, and define $V(i) = \set{u \in V; \role(u) = i}$.
+Since $\role \preceq \role'$, $\role'(u)$ is constant for any $u \in V(i)$.
+Consequently, we can define a mapping 
+$\funcdef{\eta}{A}{A'}$ 
+from roles of $\role$
+to roles of $\role'$ via the function
+$\eta(i) = \role'(u)$, where $u$ is any vertex in $V(i)$.
+
+By definition, $\eta(\role(u)) = \role'(u)$ for any $u \in V$. 
+Consequently,
+for any $j \in A'$ and any $u \in V$, 
+the $j$-th coordinate of the profile vector $\prof{u; \role'}$
+of $u$ in $\role'$ can be computed as  
+\[
+\prof{u; \role'}_j = \sum_{\ell\mid\eta(\ell) = j} \prof{u; \role}_\ell.
+\]
+This guarantees that if $\prof{v, \role} = \prof{w, \role}$, then $\prof{v; \role'} = \prof{w; \role'}$.
+\end{IEEEproof}
+
+Lemma~\ref{lem:refineprofile} implies 
+that if a perfect role assignment $\role^*$
+is a refinement of another assignment $\role$, 
+then $\role$ assigns the same profile to all vertices
+with the same role in the perfect role assignment  $\role^*$.
+
+\begin{corollary}
+\label{cor:refineprofile}
+Let $\role^*$ be a perfect (zero-cost) role assignment.
+Let $\role$ be a role assignment with $\role^* \preceq \role$.
+Consider two vertices with $\role^*(v) = \role^*(w)$. 
+Then $\prof{v; \role} = \prof{w; \role}$.
+\end{corollary}
+
+\begin{proof}
+Since $\role^*(v) = \role^*(w)$ and 
+since $\role^*$ does not incur any cost, 
+we must have $\prof{v, \role^*} = \prof{w, \role^*}$.
+Since $\role^* \preceq \role$,
+Lemma~\ref{lem:refineprofile} proves the claim.
+\end{proof}
+
+Let us now consider the {\algperfect} algorithm
+and denote by $\role_i$ the role assignment 
+at the beginning of the $i$-th iteration of the algorithm.
+It can be shown that a perfect role assignment  $\role^*$ 
+is a refinement of the role assignments $\role_i$
+generated by \algperfect.
+
+\begin{lemma}
+\label{lem:optimalrefine}
+Let $\role_i$ be role assignment 
+at the beginning of the $i$-th iteration \algperfect, and
+let $\role^*$ be a perfect (zero-cost) role assignment. 
+Then $\role^* \preceq \role_i$.
+\end{lemma}
+
+
+\begin{proof}
+We will prove the lemma by induction. 
+It obviously holds for $i = 1$.
+Let $v$ and $w$ be two vertices with $\role^*(v) = \role^*(w)$.
+By the inductive hypothesis we have  $\role^* \preceq \role_i$,
+for which
+Corollary~\ref{cor:refineprofile} implies that $\prof{v; \role_i} = \prof{w; \role_i}$.
+Then, by definition of \algperfect
+we get $\role_{i + 1}(v) = \role_{i + 1}(w)$, 
+which implies $\role^* \preceq \role_{i+1}$ 
+and completes the induction.
+\end{proof}
+
+It is also not hard to see that 
+\algperfect generates role ass\-ign\-ments 
+that are iteratively refining one another.
+
+\begin{lemma}
+\label{lem:progress}
+$\role_{i + 1} \preceq \role_i$.
+\end{lemma}
+
+\begin{proof}
+We will prove this result by induction, too. 
+The base case $i = 1$ is obvious.
+To prove the general case for $i > 1$
+consider two vertices $v$ and $w$ with $\role_{i + 1}(w) = \role_{i + 1}(v)$.
+By the definition of the algorithm, 
+this can only happen if $\prof{v, \role_i} = \prof{w, \role_i}$.
+By the induction assumption,
+we have $\role_i \preceq \role_{i - 1}$, and Lemma~\ref{lem:refineprofile}
+guarantees that $\prof{v, \role_{i  - 1}} = \prof{w, \role_{i  - 1}}$. 
+By the definition of the algorithm, 
+we have $\role_{i}(w) = \role_{i}(v)$, which proves the lemma.
+\end{proof}
+
+Since  \algperfect  produces role assignments 
+that iteratively refine one another,
+and since a perfect role assignment 
+is always a refinement of all the intermediate assignments,
+it follows that \algperfect will eventually 
+find a perfect role assignment. 
+To complete the proof of Proposition~\ref{prop:perfectcorrect}
+and obtain the main claim in this Section, 
+we also need to show that the solution 
+returned by \algperfect has the smallest possible number of roles.
+This is shown next.
+
+\begin{proof}[of Proposition~\ref{prop:perfectcorrect}]
+Let $\role^*$ be the role assignment with the zero cost and the smallest
+number of distinct roles.
+%Lemma~\ref{lem:optimalrefine} guarantees that $\role^* \preceq \role_i$ for any $i$.
+
+Lemma~\ref{lem:progress} states that $\role_{i + 1} \preceq \role_i$. 
+If $\role_i \neq \role_{i + 1}$, then the number of roles must increase. 
+% (This guarantees that we can have at most $\bigO{n}$ iterations.)
+By the termination condition of the algorithm
+and the previous observation, 
+when the algorithm terminates we have $\role_{i} = \role_{i + 1}$. 
+This can only happen when
+$\prof{v; \role_i} = \prof{w; \role_i}$ for any $v$ and $w$ with $\role_i(v) = \role_i(w)$. 
+Consequently, $\role_i$ yields a zero-cost solution, so it is perfect role assignment. 
+Lemma~\ref{lem:optimalrefine} guarantees that $\role^* \preceq \role_i$, 
+which implies that $\role_i$ has at most as many roles as $\role^*$, 
+and thus, $\role_i$ has the smallest number of distinct roles.
+\end{proof}
+
+Finally, we analyze the running time of \algperfect.
+
+\begin{proposition}
+The computational complexity of \algperfect is $\bigO{mn \log n}$.
+\label{prop:exacttime}
+\end{proposition}
+
+\begin{proof}
+At each iterations we increase the number of roles. Since the number of roles
+is at most $n$, we can have at most $\bigO{n}$ iterations.
+Next we analyze the running time of each iteration.
+
+Let us represent the profiles with sorted sparse lists. The size of a profile
+of a vertex $v$ is $\bigO{\dg{v}}$. The total time of constructing the profiles is
+then
+\[
+	\bigO{\sum_{v \in V} \dg{v} \log \dg{v}} \subseteq \bigO{m \log n}.
+\]
+
+Grouping based on profiles can be done by sorting the profiles in
+lexicographical order, and then comparing the consecutive profiles. 
+
+We next analyze the time needed to sort the profiles in lexicographical order.
+Notice that comparing the profiles  $\prof{v}$ and $\prof{w}$ of two vertices $v$ and $w$ 
+cannot be done in constant time; 
+instead time $\bigO{\min\{\dg{v}, \dg{w}\}}$ is required.
+
+Assume that merge sort is used for ordering the profiles lexicographically.
+Consider a counter $\Delta(v)$ defined as follows:
+initially, $\Delta(v)$ is set to $0$.
+Consider, that we are merging two sorted vertex lists during the merge sort.
+Assume that we are comparing vertex $v$ from the first list and vertex $w$ from the second list,
+and assume that we determine $\prof{v; \role} \leq \prof{w; \role}$.
+In such case, we increase $\Delta(v)$ by $\dg{v}$.
+If $\prof{v; \role} > \prof{w; \role}$, then we increase $\Delta(w)$ by $\dg{w}$.
+
+The increase of $\Delta(v)$ or $\Delta(w)$ is an upper bound for the
+time that is required for each comparison, so
+it immediately follows that sorting can be done in time $\bigO{\sum_u \Delta(u)}$. 
+
+Note whenever we increase the counter, we always advance to the next vertex in
+the list. That is,
+each counter $\Delta(v)$ can be increased only once during a single merge, 
+and each vertex participates only in $\bigO{\log n}$ merges.
+Consequently, $\Delta(v) \in \bigO{\dg{v} \log n}$. 
+This implies that sorting the profiles using  merge sort requires time 
+$\bigO{\sum_v \dg{v} \log n} = \bigO{m \log n}$.
+\end{proof}

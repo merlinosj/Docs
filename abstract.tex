@@ -1,0 +1,23 @@
+
+We provide a new formulation for the 
+problem of role discovery in graphs. 
+Our definition is structural and recursive: 
+two vertices should be assigned to the same role
+if the roles of their neighbors, when viewed as multi-sets, are similar enough.
+An attractive characteristic of our approach 
+is that it is based on optimizing a well-defined objective function, 
+and thus, contrary to previous approaches, 
+the role-discovery task can be studied with the tools of combinatorial optimization.
+
+We demonstrate that, when fixing the number of roles to be used, 
+the proposed role-discovery problem is \np-hard, 
+while another (seemingly easier) version of the problem is \np-hard to approximate.
+On the positive side, 
+despite the recursive nature of our objective function, 
+we can show that finding a \emph{perfect} (zero-cost) role assignment
+with the minimum number of roles can be solved in polynomial time. 
+% Unfortunately, this polynomially-time solvable version of the problem
+% is not very useful in practice, as the minimum number of roles found tends to be large.
+For the more practical version of the problem with fixed number of roles
+we present two natural heuristic methods, 
+and discuss how make them scalable in large graphs.

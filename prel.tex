@@ -1,0 +1,136 @@
+\section{Preliminaries and\\problem definition}
+\label{sec:prel}
+
+We consider a graph $G = (V, E)$ 
+with $|V|=n$ vertices and $|E|=m$ edges. 
+Our goal is to assign roles to the vertices of the graph $G$.
+We assume that the total number of roles $k$ is given.
+A \emph{role assignment} 
+$\funcdef{\role}{V}{[1, k]}$ is a function mapping each vertex $v$ to an integer between 1 and $k$, 
+which is interpreted as a role id. 
+Given a role assignment $\role$, 
+the \emph{profile} of a vertex $v$ for that role assignment 
+is a $k$-dimensional vector $\prof{v; \role} = \vect{x}$, 
+where $x_i$, the $i$-th coordinate of $\prof{v; \role}$, 
+is the number of vertices with role $i$ that are adjacent to $v$,
+\[
+	x_i = \abs{\set{(v, w) \in E \mid \role(w) = i}}.
+\]
+Our guiding principle for assigning roles to the graph vertices is that
+\emph{vertices assigned to the same role should have more similar
+profiles than vertices assigned to different roles.}
+
+As vertex profiles are $k$-dimensional vectors, 
+we quantify the similarity between them using the Euclidean distance 
+$\dist{\vect{x},\vect{y}} = || \vect{x}-\vect{y} ||_2 = 
+(\sum_{i=1}^k |x_i-y_i|^2)^{1/2}$, 
+where $\vect{x}$ and $\vect{y}$ are vertex profiles.
+
+Furthermore, each role $i\in[1,k]$ is represented by a $k$-dimensional vector $\centroid_i$, 
+which is selected as a representative of the profile vectors of all vertices assigned to role $i$.
+We use the Euclidean distance to define the distance between 
+a vertex profile $\prof{v; \role}$ 
+and a role representative vector $\centroid$.
+For simplicity of notation we write 
+\[
+\dist{v, \centroid; \role} = 
+\dist{\prof{v; \role},\centroid} = 
+\norm{\prof{v; \role} - \centroid}_2.
+\]
+The role-mining problem we consider
+can now be formulated as follows.
+
+\begin{problem}
+\label{problem:role-mining}
+\emph{(\prbrm)}
+Given a graph $G = (V, E)$ and an integer $k$, 
+find a role assignment $\funcdef{\role}{V}{[1, k]}$ and 
+$k$ representative role vectors $\centroid_1, \ldots, \centroid_k$
+that minimize the cost
+\[
+\cost{\role, \centroid_1, \ldots, \centroid_k} = 
+\sum_{v \in V} \dist{v, \centroid_{\role(v)}; \role}^2.
+\]
+\end{problem}
+
+We can show that the \prbrm problem is  \np-hard.
+The proof of the following proposition is obtained 
+by a reduction from the \tmatch problem.
+The proof is given in the appendix.
+
+\begin{proposition}
+\label{proposition:np}
+\prbrm is \np-hard.
+\end{proposition}
+
+Intuitively, problem \prbrm resembles the $k$-means clustering problem.
+However, a careful reader should immediately realize
+that we are dealing with a much harder problem than $k$-means clustering.
+To see this, notice that in the $k$-means problem 
+we aim to cluster vectors whose coordinates are \emph{fixed}. 
+In the \prbrm problem, however, we aim to cluster vertex profiles,
+which are vectors whose coordinates depend on the role assignment.
+Thus, we are working with a clustering problem
+in which the data recurrently depend on the output of the clustering problem itself.
+
+To emphasize the difference between \prbrm and $k$-means clustering, 
+consider the standard property of $k$-means algorithm:
+\emph{for a fixed cluster membership it is easy to compute optimal representative vectors (centroids), 
+and for fixed centroids it is easy to compute optimal cluster membership}. 
+
+We can show that for the \prbrm problem
+only the first part of the corresponding property holds.
+Indeed, for a \emph{fixed} role assignment $\role$
+the profiles of all vertices are also fixed.
+The representative vector of a role
+can then be easily computed as the centroid
+of the profiles of all vertices that are assigned to that role. 
+
+On the other hand, 
+when the role centroids $\centroid_1, \ldots, \centroid_k$ are fixed
+it is not easy to compute the optimal role assignment~$\role$.
+We refer to this problem as \prbrmfixed.
+
+\begin{problem} 
+\label{problem:role-mining-fixed}
+\emph{(\prbrmfixed)}
+Assume a graph $G = (V, E)$ % an integer $k$,
+and $k$ centroids $\centroid_1, \ldots, \centroid_k$.
+Find a role assignment $\funcdef{\role}{V}{[1, k]}$ 
+that minimizes the cost function
+\[
+\cost{\role} = 
+\sum_{v \in V} \dist{v, \centroid_{\role(v)}; \role}^2.
+\]
+\end{problem}
+
+The next proposition is proven in the appendix.
+
+\begin{proposition}
+\label{proposition:np-fixed}
+Deciding whether an instance of \prbrmfixed has a zero-cost solution 
+is an \np-complete problem. 
+\end{proposition}
+
+Not only does Proposition \ref{proposition:np-fixed} imply that \prbrmfixed is an \np-hard problem, 
+but it also establishes that \prbrmfixed cannot be approximated to any multiplicative factor, 
+no matter how large.
+
+\begin{corollary}
+Unless $\poly = \np$, there is no polynomial 
+algorithm
+that provides an approximation guarantee
+to the \prbrmfixed problem.
+\end{corollary}
+
+Note that even though intuitively 
+\prbrm is a more difficult problem than \prbrmfixed, 
+the hardness result obtained for \prbrmfixed is much stronger
+than the one obtained for \prbrm.
+This could be just an artifact of our proof techniques
+and it may the case that \prbrm is also a hard problem to approximate. 
+As we do not provide an approximation algorithm for \prbrm in this paper, 
+its approximability is left as an open problem.
+
+
+

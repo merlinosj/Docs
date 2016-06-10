@@ -1,0 +1,359 @@
+
+We will first prove Proposition~\ref{proposition:np}.
+
+\begin{proof}[of Proposition~\ref{proposition:np}]
+We will prove the hardness from \tmatch: an \np-hard problem where we are given
+a universe $U$ and family $\mathcal{M}$ of sets of size $3$, and we are asked
+to find a maximum disjoint cover. 
+
+Assume that we are given an instance $(U, \mathcal{M})$ of \tmatch.  Let $n =
+\abs{U}$ and $m = \abs{\mathcal{M}}$. We can safely assume that $n$ is divisible by 3.
+
+Define $h = {n \choose 3}$ the number of possible
+sets of size $3$ over $U$. Let $\ell = {n - 1 \choose 2}$ be the number of possible
+sets of size $3$ containing a fixed vertex in $U$.
+Let us define $t = 8m$ and $s = 2t$.
+
+\emph{Graph construction:}
+The graph constists of two major parts.
+
+The first part entails 7 vertex sets: we start with $A_1$ and $A_2$ with $\abs{A_1} = 3$ and $\abs{A_2}
+= \ell - 1$.
+A single vertex, say $v$, 
+is connected to an additional vertex, say $w$. We write $A_3 = \set{v}$ and $A_4 = \set{w}$.
+Futhermore, $w$ is connected to a biclique of $A_5 = K(s, s)$.
+%Each vertex $a \in A_1$ is connected to its own clique of size $h$; the vertices in these cliques form $A_6$.
+
+Each vertex $u \in A_1$ and $v \in A_2$ is connected with a \emph{fat} edge:
+$t$ copies of a path $u$--$x$--$v$, where $x$ is a vertex unique to the path.
+These vertices form $A_6$.
+Similarly, each vertex $u \in A_1$ and $v \in A_3$ is connected with a \emph{fat} edge;
+the intermediate vertices form $A_7$.
+
+%Finally, one
+%vertex, say $b^* \in B$ is connected to an additional vertex, who is also connected
+%to a biclique $K(s, s)$.
+
+The final graph consists of $t$ copies of the first part. We redefine $A_i$ to be
+the union of the corresponding groups in each copy.
+
+The second part is very similar to the first.  It entails the vertex sets
+$B_1$, $B_2$, and $B_3$ with $\abs{B_1} = n$, $\abs{B_2} = h - m$ $\abs{B_3} = m$.
+Here $B_1$ corresponds to the universe $U$, and $B_2$ and $B_3$ correspond to
+triplets of elements in $U$. Each vertex in $B_3$ is connected to its own vertex.
+These vertices form $B_4$. Each vertex in $B_4$ is also connected to its own dedicated biclique
+$K(s, s)$. The vertices in bicliques form $B_5$.
+A vertex in $B_2$ is connected to the corresponding vertices in $B_1$ with a fat edge
+of size $t$. The intermediate vertices form $B_6$.
+Similarly, a vertex in $B_3$ is connected to the corresponding vertices in $B_1$ with a fat edge
+of size $t$. The intermediate vertices form $B_7$.
+
+
+
+\iffalse
+The first part entails vertex sets $A$ and $B$ with $\abs{A} = 3$ and $\abs{B}
+= \ell$.  Each vertex $a \in A$ and $b \in B$ is connected with a \emph{fat} edge:
+$t$ copies of a path $a$--$x$--$b$, where $x$ is a vertex unique to the path.
+Each vertex $a \in A$ is connected to its own clique of size $h$.  Finally, one
+vertex, say $b^* \in B$ is connected to an additional vertex, who is also connected
+to a biclique $K(s, s)$.
+
+The final graph consists of $t$ copies of the first part.
+
+The second part is very similar to the first.  It entails the vertex sets $A'$
+and $B'$ with $\abs{A'} = n$ and $\abs{B'} = h$. Here $A'$ corresponds to the
+universe $U$.  Each vertex $a \in A'$ and $b \in B'$ is connected with a
+\emph{fat} edge of size $t$.  Finally, let $C'$ be the subset of $B'$ that
+corresponds to the sets in $\mathcal{M}$.  Each vertex $c \in C'$ is connected
+to its own unique vertex. We will denote these vertices by $O'$.
+Each vertex in $O'$ is also connected to its own dedicated bi-clique
+$K(s, s)$. 
+\fi
+
+\emph{Role assignment:}
+Let us now define a role assignment, later this will turn out to be the optimal
+assignment. Let $\mathcal{W}$, not necessarily a subset of $\mathcal{M}$, be a
+matching covering completely $U$.
+
+Let $C_3$ be the vertices in $B_2 \cup B_3$ corresponding to $\mathcal{W}$.
+Let $C_1 = B_1$, $C_2 = (B_2 \cup B_3) \setminus C_3$ $C_4 = B_4$, $C_5 = B_5$.
+Let $C_6$ be the vertices in $B_6 \cup B_7$ adjacent to $C_3$, and set $C_7 = (B_6 \cup B_7) \setminus C_6$.
+We define $\role(v) = i$, where $v \in A_i \cup C_i$.
+Let us write $\role_{\mathcal{W}} = \role$.
+
+Let us compute the cost of $\role$.
+To that end, write $c_{ij}$ to be the cost incurred by the $j$th component of the $i$th role.
+The only non-zero costs are $c_{24}$, $c_{42}$, $c_{34}$, and $c_{43}$.
+Define $n_i = \abs{\set{v ; \role(v) = i}}$,
+and let $\alpha = \abs{A_3 \cup (B_3 \cap C_3)}$ and $\beta = \abs{B_3 \cap C_2}$.
+We can express the cost as
+\[
+	c_{24} + c_{34} + c_{42} + c_{43} = f(\beta, n_2) + f(\alpha, n_3) + 2f(\alpha, n_4),
+	%c_{24} = f(\beta, n_2)
+	%c_{34} = f(\alpha, n_3)
+	%c_{42} = f(\alpha, n_4)
+\]
+where $f(x, y) = x(y - x)/y$.
+The counts $n_i$ do not depend on $\mathcal{W}$.
+Since $\alpha + \beta = n_4$, so the cost of depends on $\mathcal{W}$ only via $\alpha$.
+We have $2\alpha \geq 2t \geq n_3, n_4$ and $2\beta \leq 2m \leq t \leq n_2$.
+Since $f(x, y)$ is a parabola peaking at $x = y / 2$,
+the cost decreases as $\alpha$ increases.
+
+Since $f(x, y) \leq \min(x, y / 2 - x)$, we can upper-bound the cost
+by $n_3 + 2n_4 - 3\alpha + \beta < 4m$.
+
+\iffalse
+
+Let $\alpha = \abs{A_3 \cup C_3}$ be the number of vertices with $\role(v) = 3$.
+Let $\beta = \abs{A_2 \cup C_2}$ be the number of vertices with $\role(v) = 2$.
+Define also $\alpha_1 = \abs{A_3 \cup (B_3 \cap C_3)}$,
+and $\beta_1 = \abs{B_3 \cap C_2}$.
+A laborous comptuation reveals that the cost of $\role$ is equal to
+\begin{equation}
+\label{eq:cost}
+	f(\alpha_1, \alpha) + f(\beta_1, \beta) + 2f(\alpha_1, \alpha_1 + \beta_1),
+\end{equation}
+where $f(x, y) = 2x(y - x)/y$.
+Note that $\alpha$, $\beta$, and $\alpha_1 + \beta_1 = \abs{A_2} + \abs{B_3}$ are all constant.
+Moreover, since
+$\alpha_1 \geq \alpha / 2$,
+$\beta_1 \leq \beta / 2$,
+$\alpha_1 \geq \beta_1$, Eq.~\ref{eq:cost} decreases as $\abs{B_3 \cap C_3}$ increases.
+
+Since $f(x, y) \geq x$ for $x \leq y / 2$,
+we can upper-bound the cost by
+\[
+\begin{split}
+	\alpha - \alpha_1 + \beta_1 + 2\beta_1 & = \abs{A_3 \cup C_3} - \abs{A_3 \cup (B_3 \cap C_3)} + 
+	t + n / 3 - (t + \abs{D}) + 3(m - \abs{D}) \\
+	& = n / 3 + 3m - 4\abs{D} < 4m.
+\end{split}
+\]
+
+\emph{Role assignment:}
+Let us now define a role assignment, this will turn out to be optimal
+assignment.  Let $\mathcal{W} \subseteq \mathcal{U}$ be the maximum matching.
+If $\mathcal{W}$ does not cover completely $\mathcal{U}$, then let $\mathcal{W}'$
+be additional sets outside $\mathcal{M}$ completing the matching.
+Let $D$ be the vertices in $B'$ corresponding to $\mathcal{W}$.
+Let $D'$ be the vertices in $B'$ corresponding to $\mathcal{W}'$.
+Let $K$ be the union of all bi-cliques.
+\[
+	\role(v) =
+\begin{cases}
+1 & v \in K,\\
+2 & v \text{ adjacent to } K,\\
+3 & v \in A \text{ or } v \in A',\\
+4 & v \in D \cup D', \text{ or } v = b^*, \\
+5 & v \in B' \setminus (D \cup D'), \text{ or } v \in B \setminus \set{b^*},\\
+6 & v \text{ is a fat edge adjacent to } w, \role(w) = 4,\\
+7 & v \text{ is a fat edge adjacent to } w, \role(w) = 5.\\
+\end{cases}
+\]
+
+Define the roles as follows: The roles of vertices in bi-cliques $K(s, s)$ are
+set to 2, the roles of adjacent vertices to the bi-cliques are set to 1. The
+roles of vertices in $A$ and $A'$ are set to 3. The roles of vertices
+corresponding to $\mathcal{W}$, as well as $b^*$, are set to $4$.
+The roles for the remaining vertices in $B$ and $B'$ are set to 
+
+Let us compute the cost of $\role$.
+Let $\alpha = t + n / 3$ be the number of vertices with $\role(v) = 4$.
+Among these vertices,
+let $\alpha_1 = t + \abs{D}$ be the number of vertices adjacent to a vertex with
+a role of 2.
+Let $\beta = t\ell + k - \alpha$ be the number of vertices with $\role(v) = 5$.
+Among these vertices,
+let $\beta_1 = m - \abs{D}$ be the number of vertices adjacent to a vertex with
+a role of 2.
+A laborous comptuation reveals that the cost of $\role$ is equal to
+\begin{equation}
+\label{eq:cost}
+	f(\alpha_1, \alpha) + f(\beta_1, \beta) + 2f(\alpha_1, \alpha_1 + \beta_1),
+\end{equation}
+where $f(x, y) = 2x(y - x)/y$. Note that $\alpha$, $\beta$, and $\alpha_1 + \beta_1$ are all constant.
+Moreover, since
+$\alpha_1 \geq \alpha / 2$,
+$\beta_1 \leq \alpha / 2$,
+$\alpha_1 \geq \beta$, Eq.~\ref{eq:cost} decreases as $\abs{D}$ increases.
+
+
+Since $f(x, y) \geq x$ for $x \leq y / 2$,
+we can upper-bound the cost by
+\[
+\begin{split}
+	\alpha - \alpha_1 + \beta_1 + 2\beta_1 & = t + n / 3 - (t + \abs{D}) + 3(m - \abs{D}) \\
+	& = n / 3 + 3m - 4\abs{D} < 4m.
+\end{split}
+\]
+
+\fi
+
+\emph{Role $\role$ is optimal:}
+Let $\role^*$ be the optimal role assignment with a cost of $\sigma$.  Consider
+that if instead of selecting optimal centroids for $\role^*$, we select the
+optimal centroids---we denote them by $\mu'$---among the profiles of the
+vertices in the cluster. We know that the cost of $\role^*$ w.r.t. $\mu'$, say
+$\tau$, is at most $2\sigma$. If $\tau \geq 8m$, then $\sigma \geq 4m$, the cost of $\role$, which
+violates the optimality of $\role^*$. Consequently, $\tau < 8m = t$.
+
+Note that $\mu'$ are all integral. We can safely assume that the copies of the
+first part of the graph have the same role assignment. This immediately implies
+that the profiles of $\role^*$ should match \emph{exactly} the centroids $\mu'$.
+
+There are 6 groups with distinct degrees in the first part:
+$\dg{u} = t\ell$ for $u \in A_1$,
+$\dg{u} = 3t$ for $u \in A_2$,
+$\dg{u} = 1 + 3t$ for $u \in A_3$,
+$\dg{u} = 2s + 1$ for $u \in A_4$,
+$\dg{u} = s + 1$ for $u \in A_5$,
+$\dg{u} = 2$ for $u \in A_6 \cup A_7$.
+Since the vertices from different groups have different degrees, $\role^*$
+must be a refinement of this partition.
+Moreover, $A_6$ connects to $A_2$ and $A_7$ connects to $A_3$.
+Thus they cannot have the same role. 
+This gives us 7 groups, and $\role^*$ must be a refinement of this partition.
+Since we have only 7 roles, this must be the role assignment.
+
+Let us now consider the second part of the graph.
+Let $u \in B_1$.
+The only integral centroid that matches $\dg{u}$ is $\mu'_1$, and the
+remaining centroids differ in degree
+by at least of $t$, consequently $\dist{u, \mu'_i} \geq t$ for $i \neq 3$.
+This forces, $\role^*(u) = 1$. Similarly,
+$\role^*(u) = 4$, for $u \in B_4$, 
+$\role^*(u) = 5$, for $u \in B_5$,
+$\role^*(u) = 6, 7$, for $u \in B_6 \cup B_7$.
+
+Let $u \in B_2 \cup B_3$. If $\role^*(u) \neq 2, 3$, then each vertex in a fat edge will
+introduce a cost of at least 1, when compared to the integral centroids $\mu'$.
+Since there are $t$ of these vertices, we must have $\role^*(u) = 2, 3$.  Using
+a similar argument, among the vertices in $B_2 \cup B_3$ adjacent (by a fat edge) to a vertex $v \in B_1$,
+only one has the role $3$, the remaining adjacent vertices have the role $2$.
+
+This shows that $\role^* = \role_{\mathcal{W}}$, where $\mathcal{W}$ are the sets corresponding
+to the vertices with role $3$. We saw earlier that the cost is minimized when $\alpha = t +
+\abs{\mathcal{W} \cap \mathcal{M}}$
+is maximized.
+\end{proof}
+
+
+\iffalse
+\emph{(i)} a vertex $o$ with $\dg{o} = 2s + 1$,
+\emph{(ii)} a vertex in $K(s, s)$ with $\dg{o} = s + 1$,
+\emph{(iii)} vertices $a \in A$ with $\dg{a} = t\ell$,
+\emph{(iv)} vertex $b^*$ with $\dg{b^*} = 1 + 3t$,
+\emph{(v)} the remaining vertices $b \in B \setminus \set{b^*}$ with $\dg{b} = 3t$, and finally
+\emph{(vi)} the vertices in fat edges with degree of $2$.
+Since the vertices from different groups have different degrees, $\role^*$
+must be a refinement of this partition. Note that the fat edges can be split further into
+two groups:
+\emph{(vi.a)} vertices connecting to $b^*$, and
+\emph{(vi.b)} vertices connecting to $B \setminus \set{b^*}$.
+This gives us 7 groups, and $\role^*$ must be a refinement of this partition.
+Since we have only 7 roles, this must be the role assignment.
+
+
+Let us now consider the second part of the graph.
+Let $a \in A'$.
+The only integral centroid that matches $\dg{a}$ is $\mu'_3$, and the
+remaining centroids differ in degree
+by at least of $t$, consequently $\dist{a, \mu'_i} \geq t$ for $i \neq 3$.
+This forces, $\role^*(a) = 3$. Similarly, each vertex $o \in O'$ has
+$\role^*(o) = 1$, and the vertices in the bi-cliques have the role 2.
+Each vertex $x$ in a fat edge must have $\role^*(x) = 6$ or $\role^*(x) = 7$.
+
+Let $b \in B'$. If $\role^*(b) \neq 4, 5$, then each vertex in a fat edge will
+introduce a cost of at least 1, when compared to the integral centroids $\mu'$.
+Since there are $t$ of these vertices, we must have $\role^*(b) = 3, 4$.  Using
+a similar argument, among the vertices in $B'$ adjacent to a vertex $a \in A'$,
+only one has the role $4$, the remaining adjacent vertices have the role $5$.
+
+
+The cost of $\role^*$ is now lower-bounded by the cost given in
+Eq.~\ref{eq:cost}, and it is equal if and only if $\role^* = \role$.
+
+Since the cost of $\role$ decreases as $\abs{D}$ increases, the optimal $\role$
+will correspond to the optimal matching.
+\end{proof}
+\fi
+
+To prove Proposition~\ref{proposition:np-fixed},
+we need to introduce the following \np-complete problem.
+
+\begin{problem}[\tuples]
+Assume a universe $U$ and a set $\mathcal{S}$ of 5-tuples over $U$,
+such that each $u \in U$ occurs in at least 3 tuples.
+Is there a subset $B \subseteq U$ such that each exactly 2 entries in each $S \in \mathcal{S}$
+belong to $B$.
+\end{problem}
+
+\begin{proposition}
+\tuples is \np-complete.
+\end{proposition}
+
+\begin{proof}
+\tuples is obviously in \np. We prove the hardness by reduction from \tsat.
+
+Assume that we are given $m$ clauses $C_1, \ldots, C_m$ using $n$ variables, in
+total. We can safely assume that each clause contains exactly 3 variables by
+allowing the repetition of a variable.
+
+We define the universe $U$ to contain $2n + 2 + 2m$ variables, which we will
+denote by $t$, $f$, $x_1, \ldots, x_n$, $y_1, \ldots, y_n$,
+$d_1, \ldots, d_m$, and $e_1, \ldots, e_m$.
+To simplify notation,
+we will identify $x_i$ with the $i$th positive literal and $y_i$ with the $i$th negative literal. 
+
+We introduce the following clauses:
+\emph{(1)} $(t, t, f, f, f)$,
+\emph{(2)} $(x_i, \neg x_i, t, f, f)$, where $i = 1, \ldots, n$,
+\emph{(3)}
+$(\neg c_1, \neg c_2, \neg c_3, d_j, e_j)$, where $C_j = c_{1} \lor c_{2} \lor c_{3}$
+is the $j$th clause.
+
+To make sure that each variable occurs in at least 3 tuples, we copy each tuple
+3 times.
+
+
+Assume there is $B$ solving \tuples. Set the $i$th variable to be true if $x_i \in B$, and false otherwise.
+At most $2$ variables $\neg c_i$ are in $B$, for $C_j = c_{1} \lor c_{2} \lor c_{3}$.
+Assume that $\neq c_1 = \notin B$.
+Since either $x_i \in B$ or $\neg x_i \in B$, this forces $c_1 \in B$, 
+making $C_j$ satisfied.
+
+Now assume that we can satisfy each clause. First set $B = \set{t}$. Add
+$x_i$ into $B$ if the $i$th variable is true, otherwise insert $\neg x_i$.
+Since a clause $C_j = c_{1} \lor c_{2} \lor c_{3}$ is satisfied, we have at most 2 entries in $B$ among $\neg c_i$. 
+Insert $d_j$ and/or $e_j$ to $B$ so that $(\neg c_1, \neg c_2, \neg c_3, d_j, e_j)$ contains exactly 2 entries in $B$.
+The resulting $B$ solves \tuples.
+\end{proof}
+
+\begin{proof}[of Proposition~\ref{proposition:np-fixed}]
+The problem is in \np.  We will prove the hardness from \tuples.
+Assume that we are given an instance $(U, \mathcal{S})$ of \tuples.
+Let $n = \abs{U}$ and $m = \abs{\mathcal{S}}$.
+Let $\ell_u$ be the total number of occurrences, counting multiplicities,
+of $u$ in $\mathcal{S}$.
+
+Define the graph as follows:
+For each $u \in U$, add a cycle of length $\ell_u$. Note that the cycle is simple
+since $\ell_u \geq 3$. Denote this cycle by $D_u$.
+
+For each tuple $C_j$ add a vertex $w_j$, and connect it to 
+a vertex in $D_u$, where $u \in C_j$. The connection can and should be done such
+that each vertex in each cycle is connected to exactly one $w_j$.
+
+Set the number of roles $k = 3$, and define the following centroids $\mu_1 = (2, 0, 1)$, $\mu_2 = (0, 2, 1)$,
+and $\mu_3 = (2, 3, 0)$.
+
+Let $r$ be the optimal role assignment for the defined centroids.
+The cost of is 0 if and only if
+\emph{(i)} every vertex in $v \in D_u$ has the same role, $\role(v) = 1, 2$,
+\emph{(ii)} $\role(w_j) = 3$,
+\emph{(iii)} for each $w_j$ there are two adjacent vertices with role 1
+and three adjacent vertices with role 2.
+
+Consequently, $B$ in \tuples corresponds to the vertices with role 1.
+\end{proof}

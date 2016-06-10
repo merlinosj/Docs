@@ -1,0 +1,68 @@
+\section{Related work}
+\label{section:related}
+
+
+Role-discovery methods can be broadly classified into three categories~\cite{rossi2015role}: 
+($i$) graph-based, 
+($ii$) feature-based, and 
+($iii$) hybrid.
+Graph-based methods compute roles directly from the graph representation. 
+A number of different definitions have been suggested
+for quantifying when two nodes are equivalent and should be assigned to the same role. 
+
+In automorphic equivalence (see, for example,~\cite{hanneman:05:introduction}),
+where two vertices $u$ and $v$ are equivalent if there is graph automorphism
+mapping $u$ to $v$.  Furthermore, the vertices are structurally
+equivalent~\cite{lorrain1971structural}, if the automorphism does not alter the
+remaining vertices. A more relaxed definition of equivalence is regular
+equivalence~\cite{everett1994regular}, where vertices are equivalent if they
+have equivalent neighbors, ignoring any multiplicities. 
+
+Blockmodelling can be viewed as a role assignment task. Here the idea is to
+model the edge appearance between two vertices $u$ and $v$ based on their roles.
+The roles are viewed as latent variables, and are learned using standard
+statistical optimization techniques~\cite{snijders:97:estimation}.
+For more details on blockmodels, see the survey of Goldenberg et al.~\cite{Goldenberg:2010:SSN}.
+
+\iffalse
+stochastic equivalence~\cite{holland1981exponential}.
+Typically, methods for graph-based role discovery rely on 
+blockmodels~\cite{airoldi2009mixed,holland1983stochastic}, 
+which are based on matrix-decomposition techniques
+and are not easily scalable to very large graphs. 
+\fi
+
+Feature-based role discovery is a more modern approach that relies on
+representing each node in the graph by a feature vector and assigning to the
+same role nodes with similar feature
+vectors~\cite{henderson2012rolx,rossi2015role,rossi2013modeling,zhao2013inferring,gilpin2013guided}.
+Features can be extracted from graph-based properties of each node, such as,
+degree, clustering coefficient, centrality, etc., or combined with other
+information that may be available for the graph nodes, such as dynamic behavior
+or node attributes. 
+Once feature vectors are constructed, the assignment
+problem can be viewed as a traditional clustering problem, and thus can be
+approached with classic clustering techniques. From technical point of view,
+our setting differs fundamentally since our features, namely the roles of
+neighbors, depend on the clustering.
+Hybrid role discovery methods combine both methods. For example, using learned blockmodels
+as features~\cite{rossi2015role}.
+
+The typical key component in role discovery is how to measure similarity
+between two vertices. The simplest way to do this is by computing a distance
+between the neighbors, such as, cosine similarity or Pearson coefficient of
+common neighbors.  As a more intricate example, we can also based vertex
+similarity on features of neighboring vertices~\cite{yang2015network} or
+spectral analysis~\cite{tsourakakis2014toward}.
+
+
+We should stress that role discovery has a different goal than community
+detection: in community detection, we are interested in finding highly
+connected subsets, whereas in role discovery we want to find vertices that
+serve similar purpose. Interestingly, Ruan and Parthasarathy~\cite{ruan2014simultaneous}
+proposed mining roles and communities simultaneously.
+
+Finally, a fruitful direction for role discovery is to adapt existing
+methodology designed for static networks for dynamic settings, where the role
+may change over time~\cite{abnar2015ssrm,li2013learning}. We leave adapting
+our approach for dynamic settings as future work.
