@@ -5,11 +5,19 @@ In this section we present our experimental evaluation.  Our emphasis is to
 compare the performance of \alggreedy and \algiterative, as well as to compare
 the results with \algrolx~\cite{henderson2012rolx}.\footnote{We used an implementation by Circulo project, \url{https://github.com/lab41/circulo}.}
 
+%[[77, 14, 0], [6, 7, 1], [6, 12, 9]]
 
 \spara{Experimental setup:}
-We used 8 graphs of different sizes and densities, described in Table~\ref{table:datasets}.
+We used 10 graphs of different sizes and densities, described in Table~\ref{table:datasets}.
 The first three datasets, \karate, \dolphins, and \lesmis were obtained from UCIrvine Network Data
-Repository\footnote{\url{http://networkdata.ics.uci.edu/index.php}}, and the
+Repository\footnote{\url{http://networkdata.ics.uci.edu/index.php}}.
+We created a synthetic dataset, \synth, with 3 groups of vertices, say $V_1$,
+$V_2$, $V_3$. We connected $V_1$ and $V_3$ to $V_2$ and fully connected $V_3$. After this
+we apply noise by adding or removing an edge with a probability $p$. We vary $p$ from $0$ to $0.5$.
+We also consider a collaboration network within a research
+institute\footnote{name redacted due to blind review}; we added an edge
+between the researchers if they have a joint paper in DBLP.
+The
 remaining datasets were obtained from Standford SNAP
 Repository\footnote{\url{http://snap.stanford.edu/data}}.
 \iffalse
@@ -40,12 +48,15 @@ Name&dir.&$\abs{V}$&$\abs{E}$& $\#\,\dg{}$ & $\overline{\dg{}}$\\
 {\EUall} & yes & 265\,214 & 420\,045 & 311 &3.17\\
 {\dblp} & no & 317\,080 & 1\,049\,866 & 199&6.62 \\
 {\youtube} & no & 1\,134\,890 & 2\,987\,624 & 978&5.27 \\
+{\synth} & no & 90 & -- & -- & -- \\
+{\collab} & no &  &  &  &  \\
 \bottomrule
 \end{tabular*}
 \label{table:datasets}
 \end{table}
 
-For each dataset, we applied \algperfect, \alggreedy, and \algiterative.\!\footnote{The code is available at \url{http://research.ics.aalto.fi/dmg/roles.zip}.}
+For each dataset, except for \synth and \collab,
+we applied \algperfect, \alggreedy, and \algiterative. %\!\footnote{The code is available at \url{http://research.ics.aalto.fi/dmg/roles.zip}.}
 For the 3 smallest graphs, we mined $k = 4$ roles.
 For the remaining graphs, we set $k = 10$ roles.
 When applying \alggreedy, we need to provide a role assignment as a seed. Here we considered
@@ -54,14 +65,67 @@ When applying \alggreedy, we need to provide a role assignment as a seed. Here w
 ($ii$) \alginitdeg, vertices are sorted based on degree, and split into equal-size clusters,
 ($iii$) \alginitrnd, roles are assigned randomly, 
 ($iv$) \alginitkm, where we use the assignment given by \algiterative. 
+The experiments conducted on \synth and \collab are described in the next section.
 
 To speed-up the computation of \alggreedy, we implemented the following
 heuristic: if the role of a vertex has not changed during the 3 last iterations,
 we no longer test the vertex. However, when we have converged, we start all over
 by testing every vertex again. We stop, when no gain is possible, even if we consider every vertex.
 
+\spara{Synthetic data:}
+Our first step is to study how well we can discover the underlying structure in
+\synth, the synthetic data.  In Figure~\ref{fig:synth}, we plotted adjusted
+rand index for each method as a function of noise level.  Shown numbers are
+averages over 100 repetitions. As expected the rand index generally decreases
+as the noise level increases: at $p = 0.5$, the graph is completely random
+and there is no structure left to discover.
+\alginitdeg, \alginitkm, and \algkm clearly outperfoms \alginitone and \alginitrnd, 
+this implies that the a good starting point is required for the \alggreedy.
+Interestingly, \algkm performs worse with small levels of noise but outperforms
+\alggreedy variants once the noise level are increased.
+
+
+\begin{figure}
+\begin{tikzpicture}
+\begin{axis}[xlabel={noise level}, ylabel= {adjusted rand index},
+    height = 3.5cm,
+    width = 8cm,
+    cycle list name=yaf,
+	yticklabel style={/pgf/number format/fixed},
+	scaled ticks = false,
+    xmin = 0,
+    xmax = 0.5,
+    ymax = 1,
+	ymin = 0.0,
+	%ytick = {0.02, 0.04, 0.06, 0.08, 0.1},
+    xtick = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5},
+	legend entries = {\alginitdeg, \alginitkm, \algkm, \alginitone, \alginitrnd}, % \alginitkm, \algkm},
+	legend pos = {outer north east},
+	legend columns = 1
+    ]
+
+\addplot+[no markers]
+    table[x index = 0, y index = 1, header = false]  {synth.dat};
+\addplot+[no markers]
+    table[x index = 0, y index = 5, header = false]  {synth.dat};
+\addplot+[no markers]
+    table[x index = 0, y index = 2, header = false]  {synth.dat};
+\addplot+[no markers]
+    table[x index = 0, y index = 3, header = false]  {synth.dat};
+\addplot+[no markers]
+    table[x index = 0, y index = 4, header = false]  {synth.dat};
+
+\pgfplotsextra{\yafdrawaxis{0}{0.5}{0.00}{1}}
+\end{axis}
+\end{tikzpicture}
+\caption{Adjusted rand index between different methods and the ground truth as
+a function of noise for the synthetic dataset. Larger numbers indicate stronger agreement.}
+\label{fig:synth}
+\end{figure}
+
+
 \spara{Perfect assignments:}
-Let us first consider the assignments given by \algperfect, given in Table~\ref{table:exact}. 
+Next, we consider the assignments given by \algperfect, given in Table~\ref{table:exact}. 
 
 \begin{table}[htb!]
 \centering
@@ -207,6 +271,7 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 \end{table}
 
 
+
 \spara{Running time:}
 Let us now consider the computational complexity of algorithms.  We present the
 number of iterations needed for convergence in Table~\ref{table:iterations},
@@ -267,6 +332,10 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 
 \label{table:time}
 \end{table}
+
+
+
+
 
 \begin{figure}[htb!]
 \begin{tikzpicture}
@@ -333,6 +402,58 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 The cost is normalized by $\cost{r'}$ such that $r'(v) = 0$, for every $v$, that is, $r'$ assigns the same role to every vertex.}
 \label{fig:facebook}
 \end{figure}
+
+\begin{figure}[ht!]
+\pgfplotsset{every axis plot post/.append style= {line width=0.5pt}}
+\begin{tikzpicture}
+\begin{axis}[xlabel={$\role(v) = 1$\hspace{1.8cm}$\role(v) = 2$\hspace{1.8cm}$\role(v) = 3$}, ylabel= {profile of $v$},
+    height = 3.5cm,
+    width = 9cm,
+    cycle list name=yaf,
+	yticklabel style={/pgf/number format/fixed},
+	scaled ticks = false,
+	no markers,
+    %xmin = 0,
+    %xmax = 0.5,
+    %ymax = 1,
+	%ymin = 0.0,
+	xtick = {0,1,...,8},
+	xticklabels = {1, 2, 3, 1, 2, 3, 1, 2, 3},
+    ]
+
+\input{hiit_profile_lines}
+%\addplot coordinates {(0, 1) (1, 4) (2, 3)};
+%\addplot+[only marks]
+    %table[x expr = {3*\thisrowno{0}}, y index = 1]  {hiit_profiles.dat};
+%\addplot+[only marks]
+    %table[x expr = {3*\thisrowno{0} + 1}, y index = 2]  {hiit_profiles.dat};
+%\addplot+[only marks]
+    %table[x expr = {3*\thisrowno{0} + 2}, y index = 3]  {hiit_profiles.dat};
+
+\pgfplotsextra{\yafdrawaxis{0}{2}{0}{9}\yafdrawxaxis{3}{5}\yafdrawxaxis{6}{8}}
+\end{axis}
+\end{tikzpicture}
+\caption{Visualization of profiles for \collab network, obtained using \alginitdeg with $k = 3$.
+Each line represents the number of neighbors of a vertex $v$ as a
+function of the neighbor role. The three groupings are based on the role of $v$.}
+\label{fig:collab}
+\end{figure}
+
+
+\spara{Case study of the collaboration network:}
+Next we consider collaboration network \collab. Here we applied \alginitdeg
+with $k = 3$. The obtained profiles are visualized in Figure~\ref{fig:collab}.
+The obtained centroids are
+$\centroid_1 = (0.65, 0.76, 0.58)$, $\centroid_2 = (2.06, 1.7, 1.55)$, $\centroid_3 = (5.2, 5.1, 1.8)$, 
+that is, the researchers with the 3rd role have many co-authors while the researchers with the 1st role
+have with limited number of co-authors. Finally, the researchers with the middle role are somewhere between
+the two classes. We constructed alternative partitioning based on the seniority of the job title:
+the 3rd role was given to the professors, while the 1st role was given to PhD students and (junior) postdocs.
+The obtained 3rd role was mostly professors while the most junior staff was mostly given role of 1.
+The adjusted rand index was $0.387$\footnote{1 means complete agreement, while 0 means that the partionings are indepedent.}.
+We should point that the seniority of the researcher is not always shown in the collaboration graphs: 
+there were many senior reseachers with few collaborators.
+
 
 \spara{Comparison to \algrolx:}
 As a final step, let us compare the obtained roles with \algrolx.
