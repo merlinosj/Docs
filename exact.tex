@@ -1,16 +1,27 @@
 \section{A polynomial algorithm for\\perfect role assignment}
 \label{section:perfect}
 
-
 Before presenting our proposed algorithms for the \prbrm problem, 
 we first present a polynomial algorithm
-for finding a perfect role assignment --- a solution with cost zero. 
-In the light of the previous \np-hardness results, 
-this polynomial algorithm appears somewhat surprising. 
-Note however, that this polynomial algorithm 
-guarantees to find the minimum number of roles for which there is a solution of cost zero. 
-This is a different question than the one posed by the \prbrm problem, 
-where we aim to find a minimum-cost solution for a given number of roles.
+for finding a perfect role assignment---a solution with cost zero.
+We will do this by arguing that the perfect role assignment is equivalent
+to the notion of equitable partition~\cite{McKay1978}, which can be solved exactly.
+
+In the light of the previous \np-hardness results, this polynomial algorithm
+appears somewhat surprising.  Note however, that this polynomial algorithm
+guarantees to find the minimum number of roles for which there is a solution of
+cost zero.  This is a different question than the one posed by the \prbrm
+problem, where we aim to find a minimum-cost solution for a given number of
+roles.
+
+Given a graph $G = (V, E)$, a partition of vertices $V_1, \ldots, V_k$ is said
+to be \emph{equitable} if the edges respect the partition, that is, $(u_1, v_1) \in E$ if
+and only $(u_2, v_2) \in E$ for any $u_1, u_2 \in V_i$ and $v_1, v_2 \in V_j$,
+$i, j = 1, \ldots k$.  Note that for such a partition, the cost will always be
+0, and vice versa. Naturally, there are many possible partitions but there is only
+partition with the smallest $k$, and this partition can be discovered
+with the algorithm that we will present for the sake of completeness. The proof
+for this algorithm is given in~\cite{McKay1978}.
 
 The polynomial algorithm, named \algperfect, 
 works by first setting $k=1$ and assigning all vertices to the same role. 
@@ -54,6 +65,7 @@ in the worst case when $k=n$ and each vertex is assigned to a unique role.
 The main claim characterizing the optimality of the \algperfect algorithm
 is formulated in the following proposition.
 
+\iffalse
 \begin{proposition}
 \label{prop:perfectcorrect}
 Algorithm~\ref{alg:perfect} converges in $\bigO{n}$ iterations. 
@@ -205,6 +217,7 @@ Lemma~\ref{lem:optimalrefine} guarantees that $\role^* \preceq \role_i$,
 which implies that $\role_i$ has at most as many roles as $\role^*$, 
 and thus, $\role_i$ has the smallest number of distinct roles.
 \end{proof}
+\fi
 
 Finally, we analyze the running time of \algperfect.
 
