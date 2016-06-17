@@ -1,25 +1,28 @@
-\section{Experimental Evaluation}
+\section{Experimental evaluation}
 \label{sec:exp}
 
 In this section we present our experimental evaluation.  Our emphasis is to
 compare the performance of \alggreedy and \algiterative, as well as to compare
-the results with \algrolx~\cite{henderson2012rolx}.\footnote{We used an implementation by Circulo project, \url{https://github.com/lab41/circulo}.}
+the results with \algrolx~\cite{henderson2012rolx}.\footnote{We use an implementation by Circulo project, \url{https://github.com/lab41/circulo}.}
+All datasets and software used in the experimental evaluation
+will become publicly available.\footnote{{\sc url} not provided for blind review.}
 
 %[[77, 14, 0], [6, 7, 1], [6, 12, 9]]
 
 \spara{Experimental setup:}
-We used 10 graphs of different sizes and densities, described in Table~\ref{table:datasets}.
-The first three datasets, \karate, \dolphins, and \lesmis were obtained from UCIrvine Network Data
-Repository\footnote{\url{http://networkdata.ics.uci.edu/index.php}}.
-We created a synthetic dataset, \synth, with 3 groups of vertices, say $V_1$,
-$V_2$, $V_3$, with $\abs{V_1} = 40$ and $\abs{V_2} = \abs{V_3} = 30$. We connected $V_1$ and $V_3$ to $V_2$ and fully connected $V_3$. After this
+We use 10 graphs of different sizes and densities, described in Table~\ref{table:datasets}.
+The first three datasets, \karate, \dolphins, and \lesmis are obtained from UCIrvine Network Data
+Repository.\footnote{\url{http://networkdata.ics.uci.edu/index.php}}
+We create a synthetic dataset, \synth, with 3 groups of vertices, say $V_1$,
+$V_2$, $V_3$, with $\abs{V_1} = 40$ and $\abs{V_2} = \abs{V_3} = 30$. 
+We connect $V_1$ and $V_3$ to $V_2$ and fully connect $V_3$. After this
 we apply noise by adding or removing an edge with a probability $p$. We vary $p$ from $0$ to $0.5$.
 We also consider a collaboration network within a research
-institute\footnote{name redacted due to blind review}; we added an edge
+institute;\footnote{Name suppressed for blind review.} we add an edge
 between the researchers if they have a joint paper in DBLP.
 The
-remaining datasets were obtained from Standford SNAP
-Repository\footnote{\url{http://snap.stanford.edu/data}}.
+remaining datasets are obtained from Standford SNAP
+Repository.\footnote{\url{http://snap.stanford.edu/data}}
 \iffalse
 \begin{itemize}
 \item {\karate:} a social network of friendships between members of karate club at a US university in 1970.
@@ -56,38 +59,40 @@ Name&dir.&$\abs{V}$&$\abs{E}$& $\#\,\dg{}$ & $\overline{\dg{}}$\\
 \end{table}
 
 For each dataset, except for \synth and \collab,
-we applied \algperfect, \alggreedy, and \algiterative. %\!\footnote{The code is available at \url{http://research.ics.aalto.fi/dmg/roles.zip}.}
-For the 3 smallest graphs, we mined $k = 4$ roles.
+we apply \algperfect, \alggreedy, and \algiterative. 
+%\!\footnote{The code is available at \url{http://research.ics.aalto.fi/dmg/roles.zip}.}
+For the 3 smallest graphs, we mine $k = 4$ roles.
 For the remaining graphs, we set $k = 10$ roles.
-When applying \alggreedy, we need to provide a role assignment as a seed. Here we considered
-4 different variants:
+When applying \alggreedy, we need to provide a role assignment as a seed. 
+We consider 4 different variants:
 ($i$) \alginitone, every vertex is assigned the same role,
 ($ii$) \alginitdeg, vertices are sorted based on degree, and split into equal-size clusters,
 ($iii$) \alginitrnd, roles are assigned randomly, 
 ($iv$) \alginitkm, where we use the assignment given by \algiterative. 
 The experiments conducted on \synth and \collab are described in the next section.
 
-To speed-up the computation of \alggreedy, we implemented the following
+To speed-up the computation of \alggreedy, we implement the following
 heuristic: if the role of a vertex has not changed during the 3 last iterations,
 we no longer test the vertex. However, when we have converged, we start all over
 by testing every vertex again. We stop, when no gain is possible, even if we consider every vertex.
 
 \spara{Synthetic data:}
 Our first step is to study how well we can discover the underlying structure in
-\synth, the synthetic data.  In Figure~\ref{fig:synth}, we plotted adjusted
-rand index for each method as a function of noise level.  Shown numbers are
-averages over 100 repetitions. As expected the rand index generally decreases
+\synth, the synthetic data.  In Figure~\ref{fig:synth}, we plot 
+{\em adjusted Rand index} for each method as a function of noise level.  
+The shown numbers are averages over 100 repetitions. 
+As expected the Rand index generally decreases
 as the noise level increases: at $p = 0.5$, the graph is completely random
 and there is no structure left to discover.
 \alginitdeg, \alginitkm, and \algkm clearly outperfoms \alginitone and \alginitrnd, 
-this implies that the a good starting point is required for the \alggreedy.
+this implies that a good starting point is required for \alggreedy.
 Interestingly, \algkm performs worse with small levels of noise but outperforms
-\alggreedy variants once the noise level are increased.
+\alggreedy variants once the noise level increase.
 
 
 \begin{figure}
 \begin{tikzpicture}
-\begin{axis}[xlabel={noise level}, ylabel= {adjusted rand index},
+\begin{axis}[xlabel={noise level}, ylabel= {adjusted Rand index},
     height = 3.5cm,
     width = 8cm,
     cycle list name=yaf,
@@ -118,7 +123,7 @@ Interestingly, \algkm performs worse with small levels of noise but outperforms
 \pgfplotsextra{\yafdrawaxis{0}{0.5}{0.00}{1}}
 \end{axis}
 \end{tikzpicture}
-\caption{Adjusted rand index between different methods and the ground truth as
+\caption{Adjusted Rand index between different methods and the ground truth as
 a function of noise for the synthetic dataset. Larger numbers indicate stronger agreement.}
 \label{fig:synth}
 \end{figure}
@@ -129,7 +134,7 @@ Next, we consider the assignments given by \algperfect, given in Table~\ref{tabl
 
 \begin{table}[htb!]
 \centering
-\caption{Discovered perfect role assignments by \algperfect. $k$ stands for number of discovered roles while
+\caption{Role assignments discovered by \algperfect. $k$ stands for the number of discovered roles while
 $\#\,\dg{}$ stands for the number of distinct degrees.}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r}
 \toprule
@@ -155,7 +160,8 @@ degrees, and the ratio increases for large graphs; these graphs have more ways
 of forcing vertices to have unique roles.
 The algorithm is practical even for large graphs as the
 computational complexity $\bigO{n m \log n}$ given by Proposition~\ref{prop:exacttime} is fairly pessimistic:
-we need only few iterations needed to converge, and each iteration needs only $\bigO{m \log n}$ time.
+only few iterations are needed for convergence, 
+and each iteration requires only $\bigO{m \log n}$ time.
 
 \spara{Performance of greedy and iterative algorithms:}
 Our next step is to compare the performance of \alggreedy and \algiterative.
@@ -189,15 +195,16 @@ Name& $k$ & \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 
 We see that the best scores are obtained by \alginitkm, that is, \alggreedy
 initialized by \algiterative. Curiously enough, \algiterative alone performs
-the worst. These results hints that the search space is highly non-trivial,
+the worst. These results hint that the search space is highly non-trivial,
 containing a plethora of local minima. This is further supported by Table~\ref{table:randgreedy},
-where we report adjusted rand index\footnote{1 corresponds to a complete agreement, 0 implies that the assignments are independent}.
-The index implies that while the obtained results all correlate positively, they do differ.
+where we report adjusted Rand index.\footnote{Value 1 corresponds to a complete agreement, 
+while 0 implies that the assignments are independent.}
+The index implies that while the obtained results all correlate positively they do differ.
 This puts extra emphasis on a good initialization of \alggreedy.
 
 \begin{table}[thb!]
 
-\caption{Adjusted rand indices between different initializations of \alggreedy. }
+\caption{Adjusted Rand indices between different initializations of \alggreedy. }
 \setlength{\tabcolsep}{0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r} 
 \toprule
@@ -230,8 +237,8 @@ change is more rapid for small values of $k$, and evens out for large values.
 
 Let us now study how well the role assignment correlates with vertex degree.  
 Since the
-roles are symbolic, we sorted the roles based on average degree, and compared
-the roles and degrees using Kendall-$\tau$.\!\footnote{we used the $b$ variant
+roles are symbolic, we sort the roles based on average degree, and compared
+the roles and degrees using Kendall-$\tau$.\footnote{We use the $b$ variant
 to accommodate the ties.} We see from the results given in
 Table~\ref{table:kendaltau} that there is significant correlation between the
 degrees and the role assignment. Naturally, this is partly due to how we sort
@@ -273,20 +280,20 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 
 
 \spara{Running time:}
-Let us now consider the computational complexity of algorithms.  We present the
+Let us now consider the computational complexity of the algorithms.  We present the
 number of iterations needed for convergence in Table~\ref{table:iterations},
-and the running times in Table~\ref{table:time}. The number of needed
+and the running times in Table~\ref{table:time}. The number of required
 iterations is modest, especially when compared to the size of the input graph.
 The running times are manageable: we should point out that we implemented
 \alggreedy using Python, an implementation with a more efficient programming
 platform should make the algorithm more user-friendly, especially for large
-graphs. As expected, the running times increase as we increase the number of roles, see
-the right plot in Figure~\ref{fig:facebook}.
+graphs. As expected, the running times increase as we increase the number of roles; 
+see the right plot in Figure~\ref{fig:facebook}.
 
 
 \begin{table}[htb!]
 \centering
-\caption{Total number of iterations needed for convergence.
+\caption{Total number of iterations required for convergence.
 \algkm depicts \algiterative, while the remaining columns
 depicts \alggreedy with different initializations.
 }
@@ -441,37 +448,37 @@ function of the neighbor role. The three groupings are based on the role of $v$.
 
 
 \spara{Case study of the collaboration network:}
-Next we consider collaboration network \collab. Here we applied \alginitdeg
+Next we consider collaboration network \collab. Here we apply \alginitdeg
 with $k = 3$. The obtained profiles are visualized in Figure~\ref{fig:collab}.
 The obtained centroids are
 $\centroid_1 = (0.65, 0.76, 0.58)$, $\centroid_2 = (2.06, 1.7, 1.55)$, $\centroid_3 = (5.2, 5.1, 1.8)$, 
 that is, the researchers with the 3rd role have many co-authors while the researchers with the 1st role
 have with limited number of co-authors. Finally, the researchers with the middle role are somewhere between
-the two classes. We constructed alternative partitioning based on the seniority of the job title:
+the two classes. We construct alternative partitioning based on the seniority of the job title:
 the 3rd role was given to the professors, while the 1st role was given to PhD students and (junior) postdocs.
-The obtained 3rd role was mostly professors while the most junior staff was mostly given role of 1.
-The adjusted rand index was $0.387$\footnote{1 means complete agreement, while 0 means that the partionings are indepedent.}.
+The obtained 3rd role is mostly professors while the most junior staff is mostly given role of 1.
+The adjusted Rand index was $0.387$.\footnote{Value 1 means complete agreement, 
+while 0 means that the partionings are indepedent.}
 We should point that the seniority of the researcher is not always shown in the collaboration graphs: 
-there were many senior reseachers with few collaborators.
-
+there are many senior reseachers with few collaborators.
 
 \spara{Comparison to \algrolx:}
-As a final step, let us compare the obtained roles with \algrolx.
+As a final step, we compare the obtained roles with \algrolx.
 In Table~\ref{table:rolx}, we present normalized costs of \algrolx and
 \textsc{r+g}:
 \alggreedy initialized with \algrolx. We also present adjusted Rand indices
-of \algrolx versus the greedy variants. The implementation we used for \algrolx
-were not able to process \youtube dataset due to memory consumption.
+of \algrolx versus the greedy variants. The implementation we use for \algrolx
+is not able to process \youtube dataset due to memory consumption.
 
 \begin{table}[htb!]
 
 \caption{Comparison of \algrolx and \alggreedy. 
 Columns 2--3 depict obtained costs, normalized by $\cost{\role'}$, where $\role'(v) = 0$ for every $v$.
-The remaining columns depict adjusted rand index of \algrolx versus \alggreedy with different initializations.}
+The remaining columns depict adjusted Rand index of \algrolx versus \alggreedy with different initializations.}
 \setlength{\tabcolsep}{0pt}
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r r} 
 \toprule
-&\multicolumn{2}{c}{$\cost{\role} / \cost{\role'}$}&&\multicolumn{4}{c}{Adj. rand vs. \algrolx}\\
+&\multicolumn{2}{c}{$\cost{\role} / \cost{\role'}$}&&\multicolumn{4}{c}{Adj.\ Rand vs.\ \algrolx}\\
 \cmidrule{2-3} \cmidrule{5-8}
 Name& \algrolx & \textsc{r+g} && \alginitdeg & \alginitone & \alginitrnd & \alginitkm\\
 \midrule
@@ -494,8 +501,8 @@ have a low score for large graphs. Positive Rand indices imply that the
 assignments of \algrolx and \alggreedy do correlate, but also differ.  
 
 As a sanity check, we construct a classifier predicting the role of a vertex
-based on its features. For \algiterative and \alggreedy we used the profiles as
-features, and for \algrolx we used the feature vectors. We used decision tree
+based on its features. For \algiterative and \alggreedy we use the profiles as
+features, and for \algrolx we use the feature vectors. We use decision tree
 classifier with 10-fold cross-validation, and the accuracy results are given in
 Table~\ref{table:classification}. We see that all methods perform well, note
 that 10 classes for large datasets and 4 classes for small datasets.  We
@@ -505,7 +512,8 @@ than for \alggreedy.
 \begin{table}[htb!]
 \centering
 
-\caption{Classification accuracy statistics of \algrolx , \algiterative , and \alggreedy. \algkm depicts \algiterative, while the remaining columns
+\caption{Classification accuracy statistics of \algrolx , \algiterative , and \alggreedy. 
+\algkm depicts \algiterative, while the remaining columns
 depicts \alggreedy with different initializations.}
 
 \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r}
@@ -532,7 +540,7 @@ Name& \algrolx &\algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 
 \begin{table*}[t]
 
-\caption{Comparison of \textsc{Rolx}, {\hillclimb} and its variants. Normalized cost of \textsc{Rolx}, {\hillclimb} and {\hillclimb} with \textsc{Rolx} result as initial solution is presented in columns 2-4. \textsc{Hill1} stands for Hill Climbing method and \textsc{Hill2} for Hill Climbing with \textsc{Rolx} result as initial solution. Role sequences of different methods are compared in columns 5-14 using adjusted rand index. \textsc{R} stands for \textsc{Rolx} method result,\textsc{D} for \textsc{deg} method result, \textsc{O} for \textsc{one} method result ,\textsc{RD} for \textsc{rnd} method result.and \textsc{KG} for \textsc{i+g} method result.}
+\caption{Comparison of \textsc{Rolx}, {\hillclimb} and its variants. Normalized cost of \textsc{Rolx}, {\hillclimb} and {\hillclimb} with \textsc{Rolx} result as initial solution is presented in columns 2-4. \textsc{Hill1} stands for Hill Climbing method and \textsc{Hill2} for Hill Climbing with \textsc{Rolx} result as initial solution. Role sequences of different methods are compared in columns 5-14 using adjusted Rand index. \textsc{R} stands for \textsc{Rolx} method result,\textsc{D} for \textsc{deg} method result, \textsc{O} for \textsc{one} method result ,\textsc{RD} for \textsc{rnd} method result.and \textsc{KG} for \textsc{i+g} method result.}
 \begin{tabular}{l r r r r r r r r r r r r r r } 
 \toprule
 &\multicolumn{3}{c}{Normalized Cost}&\multicolumn{10}{c}{Role Differences}\\ \cmidrule{2-4} \cmidrule{6-15}

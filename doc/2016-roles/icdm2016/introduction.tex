@@ -23,7 +23,7 @@ in relation to her peers.
 Similarly, identifying the role of a vertex in a technological network 
 may give useful information about the function of the vertex in the network, 
 or it may be used to detect anomalies~\cite{rossi2013multi}.
-In fact, Rossi and Ahmed~\cite{rossi2015role}
+Rossi and Ahmed~\cite{rossi2015role}
 provide an extensive and well-documented list of graph-mining tasks
 that can be facilitated by role discovery. 
 The list includes applications such as 
@@ -31,7 +31,7 @@ classification, active learning, graph visualization,
 transfer learning, graph compression, entity resolution, and more.
 
 % Not really needed, if we are low on space
-Role discovery can be seen as a process that
+In general, role discovery can be seen as a process that
 partitions the vertices of a graph into equivalence classes.
 Nodes in the same class are assigned to the same role. 
 Equivalence classes are typically
@@ -65,16 +65,17 @@ are connected to vertices with role
 $B$ (``business analyst'') and $C$ (``s/w developer''), 
 while vertices with roles $B$ and $C$ are typically not connected to each other. 
 
+\smallskip
 In this paper we present a new approach to role discovery, 
 inspired by the definition of regular equivalence.
 As the original definition is too strict to be of use in real-world datasets, 
-we provide a \emph{relaxation} that provides robustness and can tolerate noise in the data.
+we introduce a \emph{relaxation} that provides robustness and can tolerate noise in the data.
 In particular, we define an objective function that quantifies
 the degree to which a given role assignment 
 satisfies regular equivalence.
 Given a target number of roles $k$
 we then ask to find the role assignment that minimizes our objective function.
-We also take multiplicities into account: a vertex with 100 neighbors having role $A$
+Multiplicities are taken into account: a vertex with 100 neighbors having role $A$
 is treated differently than a vertex with a single neighbor having role $A$.
 
 \input{grooming}
@@ -103,7 +104,7 @@ We see that one of the two vertices with {\tt orange} role
 has smaller no larger degree than five of the vertices with {\tt green} role, 
 indicating that the role assignment we discover cannot be explained solely by degree. 
 
-
+\smallskip
 Our technical contributions are as follows: we formulate the optimization
 problem and demonstrate that this problem is \np-hard. Furthermore, we show
 that if we fix the profile centroids, 
@@ -120,7 +121,8 @@ vertex while keeping the remaining vertex roles constant,
 the problem into a standard clustering problem, that we solve using $k$-means algorithm,
 and compute the new profiles from the obtained clustering.
 
-We have benchmarked the proposed methods
+\smallskip
+We benchmark the proposed methods
 on eight different real-world datasets of varying size.
 With respect to optimization score
 the greedy hill-climbing algorithm is found to perform better 
@@ -129,7 +131,7 @@ This is consistent for many different initialization strategies,
 but interestingly enough, 
 the best performance is achieved when greedy is initialized with the solution found by the iterative.
 
-We have also contrasted our methods with
+We contrast our methods with
 \algrolx~\cite{henderson2012rolx}, 
 a representative feature-based algorithm.
 Direct comparison is not easy, 
@@ -141,6 +143,7 @@ Compared as a neutral classification task,
 where the aim is to predict the discovered roles by the corresponding features, 
 the iterative algorithm achieves the highest accuracy.
 
+\smallskip
 The rest of this paper is organized as follows.
 We present related work in Section~\ref{section:related}.
 We discuss the preliminaries and define the problem in Section~\ref{sec:prel}.
