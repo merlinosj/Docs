@@ -31,7 +31,7 @@ of the value of the objective function for the two role assignments
 \gain{v, j; \role} = 
 	\sum_{v \in V} \dist{v, \centroid_{\role(v)}; \role} - \sum_{v \in V} \dist{v, \centroid'_{\role'(v)}; \role'}.
 \]
-A positive gain means that $\role'$ produces a smaller cost, making it better.
+A positive gain means that $\role'$ produces a smaller cost, making it a better role assignment.
 
 \iffalse
 i -> j
@@ -62,7 +62,7 @@ i -> j
 The proposed hill-climbing algorithm,
 named \alggreedy, 
 is illustrated as Algorithm~\ref{alg:greedy}. 
-The algorithm starts with an initial role assignment {\role}.
+The algorithm starts with an initial role assignment ${\role}_{0}$.
 Then it sequentially tries to improve the score by change the role of each vertex in the graph.
 For each vertex $v$, it changes its assignment to the role $j$
 that maximizes the gain $\gain{v, j}$. 
@@ -70,9 +70,9 @@ If there is no role that yields a positive gain,
 the role of $v$ remains unchanged.
 
 \begin{algorithm}[t]
-\caption{$\alggreedy(G, k, r_{\mathit{init}})$, hill-climbing algorithm.}
+\caption{$\alggreedy(G, k, r_{0})$, hill-climbing algorithm.}
 \label{alg:greedy}
-initialize role assignment, $\role \define r_{\mathit{init}}$\; 
+initialize role assignment, $\role \define r_{0}$\; 
 \While {changes} {
 	\ForEach {$v \in V$} {
 		$j^* \define \arg \max_j \gain{v, j}$\;
@@ -84,7 +84,7 @@ initialize role assignment, $\role \define r_{\mathit{init}}$\;
 }
 \end{algorithm}
 
-For selecting the initial role assignment
+For selecting the initial role assignment ${\role}_{0}$
 we have experimented with a number of different strategies. 
 More details are given in the experimental section.
 
@@ -169,7 +169,7 @@ which proves the identity.
 \begin{proposition}
 The inner loop of \alggreedy
 \emph{(}{\bf foreach} loop in Algorithm~\ref{alg:greedy}\emph{)} 
-requires time $\bigO{nk^2 + km}$.
+requires time $\bigO{k^2 n + km}$.
 \end{proposition}
 
 \begin{proof}
@@ -177,5 +177,5 @@ According to Proposition~\ref{prop:fastgain}, computing the gain can be done in 
 Consequently, computing $j^*$ requires time $\bigO{k^2 + k\dg{v}}$. 
 Updating the profiles, the centroids, and the role assignment $\role$
 can be done in time $\bigO{k + \dg{v}}$. 
-Summing over all the vertices gives us a total running time of $\bigO{nk^2 + km}$.
+Summing over all the vertices gives us a total running time of $\bigO{k^2 n + km}$.
 \end{proof}

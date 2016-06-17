@@ -23,17 +23,17 @@ A single vertex, say $v$,
 is connected to an additional vertex, say $w$. We write $A_3 = \set{v}$ and $A_4 = \set{w}$.
 Futhermore, $w$ is connected to a biclique of $A_5 = K(s, s)$.
 %Each vertex $a \in A_1$ is connected to its own clique of size $h$; the vertices in these cliques form $A_6$.
-
+%
 Each vertex $u \in A_1$ and $v \in A_2$ is connected with a \emph{fat} edge:
 $t$ copies of a path $u$--$x$--$v$, where $x$ is a vertex unique to the path.
 These vertices form $A_6$.
 Similarly, each vertex $u \in A_1$ and $v \in A_3$ is connected with a \emph{fat} edge;
 the intermediate vertices form $A_7$.
-
+%
 %Finally, one
 %vertex, say $b^* \in B$ is connected to an additional vertex, who is also connected
 %to a biclique $K(s, s)$.
-
+%
 The final graph consists of $t$ copies of the first part. We redefine $A_i$ to be
 the union of the corresponding groups in each copy.
 
@@ -46,7 +46,7 @@ $K(s, s)$. The vertices in bicliques form $B_5$.
 A vertex in $B_2$ is connected to the corresponding vertices in $B_1$ with a fat edge
 of size $t$. The intermediate vertices form $B_6$.
 Similarly, a vertex in $B_3$ is connected to the corresponding vertices in $B_1$ with a fat edge
-of size $t$. The intermediate vertices form $B_7$.
+of size $t$. The intermediate vertices form~$B_7$.
 
 
 
@@ -73,7 +73,7 @@ $K(s, s)$.
 \emph{Role assignment:}
 Let us now define a role assignment, later this will turn out to be the optimal
 assignment. Let $\mathcal{W}$, not necessarily a subset of $\mathcal{M}$, be a
-matching covering completely $U$.
+matching covering completely~$U$.
 
 Let $C_3$ be the vertices in $B_2 \cup B_3$ corresponding to $\mathcal{W}$.
 Let $C_1 = B_1$, $C_2 = (B_2 \cup B_3) \setminus C_3$ $C_4 = B_4$, $C_5 = B_5$.

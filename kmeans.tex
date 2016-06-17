@@ -6,7 +6,7 @@ the problem remains intractable, even worse it cannot be approximated. This is
 a blowback to the standard iterative heuristic, where one set of parameters is
 fixed while the other set of parameters is optimized.
 
-However, if we were to fix the \emph{profiles}, then optimization task
+However, if we were to fix the \emph{profiles}, then the optimization task
 transforms into a traditional clustering problem. Once, we have discovered a
 role assignment, we can recompute the profiles, and repeat until we converge
 into a local minimum. This is exactly what we do in Algorithm~\ref{alg:iterative}.
@@ -28,8 +28,8 @@ standard $k$-means clustering algorithm. We will denote the resulting algorithm
 by $\algiterative$.
 
 Note that computing profiles from the role assignment can be done efficiently
-in $\bigO{\max(nk, m)}$ time, where $n$ is the number of vertices and $m$ is
-the number of edges. The $\bigO{nk}$ time is needed to initialize $n$ vectors of length $k$.
+in $\bigO{\max\{kn, m\}}$ time, where $n$ is the number of vertices and $m$ is
+the number of edges. The $\bigO{kn}$ time is needed to initialize $n$ vectors of length $k$.
 If the clustering algorithm allows to have sparse representation
 of the profiles, the processing time can be further reduced to $\bigO{m}$ time.
 Thus, the computational bottleneck is the clustering algorithm, as
