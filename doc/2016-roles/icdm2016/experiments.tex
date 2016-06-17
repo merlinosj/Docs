@@ -78,8 +78,8 @@ by testing every vertex again. We stop, when no gain is possible, even if we con
 
 \spara{Synthetic data:}
 Our first step is to study how well we can discover the underlying structure in
-\synth, the synthetic data.  In Figure~\ref{fig:synth}, we plot 
-{\em adjusted Rand index} for each method as a function of noise level.  
+\synth, the synthetic data.  In Figure~\ref{fig:synth}, we plot the 
+adjusted Rand index for each method as a function of noise level.  
 The shown numbers are averages over 100 repetitions. 
 As expected the Rand index generally decreases
 as the noise level increases: at $p = 0.5$, the graph is completely random
@@ -454,12 +454,12 @@ The obtained centroids are
 $\centroid_1 = (0.65, 0.76, 0.58)$, $\centroid_2 = (2.06, 1.7, 1.55)$, $\centroid_3 = (5.2, 5.1, 1.8)$, 
 that is, the researchers with the 3rd role have many co-authors while the researchers with the 1st role
 have with limited number of co-authors. Finally, the researchers with the middle role are somewhere between
-the two classes. We construct alternative partitioning based on the seniority of the job title:
-the 3rd role was given to the professors, while the 1st role was given to PhD students and (junior) postdocs.
+the two classes. We construct an alternative partitioning based on the seniority of the job title:
+the 3rd role is given to the professors, while the 1st role is given to PhD students and (junior) postdocs.
 The obtained 3rd role is mostly professors while the most junior staff is mostly given role of 1.
-The adjusted Rand index was $0.387$.\footnote{Value 1 means complete agreement, 
+The adjusted Rand index is $0.387$.\footnote{Value 1 means complete agreement, 
 while 0 means that the partionings are indepedent.}
-We should point that the seniority of the researcher is not always shown in the collaboration graphs: 
+We should point that the seniority of a researcher is not always reflected in the collaboration graph: 
 there are many senior reseachers with few collaborators.
 
 \spara{Comparison to \algrolx:}
