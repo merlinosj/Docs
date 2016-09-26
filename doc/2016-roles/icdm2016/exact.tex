@@ -1,18 +1,20 @@
-\section{A polynomial algorithm for\\perfect role assignment}
+\section{Solving perfect role assignment exactly}
 \label{section:perfect}
 
 Before presenting our proposed algorithms for the \prbrm problem, 
 we first present a polynomial algorithm
 for finding a perfect role assignment---a solution with cost zero.
 We will do this by arguing that the perfect role assignment is equivalent
-to the notion of equitable partition~\cite{McKay1978}, which can be solved exactly.
+to equitable partition~\cite{McKay1978}, which can be solved exactly.
 
+\iffalse
 In the light of the previous \np-hardness results, this polynomial algorithm
 appears somewhat surprising.  Note however, that this polynomial algorithm
 guarantees to find the minimum number of roles for which there is a solution of
 cost zero.  This is a different question than the one posed by the \prbrm
 problem, where we aim to find a minimum-cost solution for a given number of
 roles.
+\fi
 
 Given a graph $G = (V, E)$, a partition of vertices $V_1, \ldots, V_k$ is said
 to be \emph{equitable} if the edges respect the partition, that is, $(u_1, v_1) \in E$ if
@@ -42,6 +44,7 @@ Pseudocode for \algperfect is given in Algorithm~\ref{alg:perfect}.
 	}
 \end{algorithm}
 
+\iffalse
 Note that in the first iteration of \algperfect
 the profile of each vertex $v$ is a scalar (1-dimensional vector) 
 equal to the degree of the vertex.
@@ -61,9 +64,9 @@ with a smaller number of roles than the number of distinct degrees.
 
 Finally, note that the \algperfect algorithm always terminates, 
 in the worst case when $k=n$ and each vertex is assigned to a unique role.
+\fi
 
-The main claim characterizing the optimality of the \algperfect algorithm
-is formulated in the following proposition.
+%The main claim characterizing the optimality of the \algperfect algorithm is formulated in the following proposition.
 
 \iffalse
 \begin{proposition}
@@ -222,10 +225,11 @@ and thus, $\role_i$ has the smallest number of distinct roles.
 Finally, we analyze the running time of \algperfect.
 
 \begin{proposition}
-The computational complexity of \algperfect is $\bigO{mn \log n}$.
+\algperfect runs in $\bigO{mn \log n}$ time.
 \label{prop:exacttime}
 \end{proposition}
 
+\iffalse
 \begin{proof}
 At each iterations we increase the number of roles. Since the number of roles
 is at most $n$, we can have at most $\bigO{n}$ iterations.
@@ -267,3 +271,4 @@ Consequently, $\Delta(v) \in \bigO{\dg{v} \log n}$.
 This implies that sorting the profiles using  merge sort requires time 
 $\bigO{\sum_v \dg{v} \log n} = \bigO{m \log n}$.
 \end{proof}
+\fi

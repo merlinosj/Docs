@@ -6,8 +6,8 @@ returns a perfect (zero-cost) role assignment
 but it does not put any constraint on the number of roles to be used.
 In fact, as we will see in the experimental section, 
 in most cases, \algperfect is forced to use a large number of roles. 
-This is an expected behavior, 
-as the requirement for a perfect role assignment is too rigid.
+%This is an expected behavior, 
+%as the requirement for a perfect role assignment is too rigid.
 
 In this section, we return to the \prbrm problem
 (defined in Problem~\ref{problem:role-mining})
@@ -76,9 +76,9 @@ initialize role assignment, $\role \define r_{0}$\;
 \While {changes} {
 	\ForEach {$v \in V$} {
 		$j^* \define \arg \max_j \gain{v, j}$\;
-		\If {$\gain{v, j^*} > 0$} {
-			update $\role$\;
-			update profiles and centroids\;
+		\lIf {$\gain{v, j^*} > 0$} { reassign
+			%update $\role$\;
+			%update profiles and centroids\;
 		}
 	}
 }
@@ -88,6 +88,7 @@ For selecting the initial role assignment ${\role}_{0}$
 we have experimented with a number of different strategies. 
 More details are given in the experimental section.
 
+\iffalse
 As \alggreedy involves a number of nested loops, 
 a na\"{i}ve implementation will make it prohibitively expensive for large networks.
 However, we show that it is possible to implement \alggreedy 
@@ -97,7 +98,9 @@ so that the running time of the inner-most loop
 is linear in the size of the graph, 
 and quadratic only in the number of roles $k$, 
 which in practice can be assumed to be a very small constant.
+\fi
 
+\iffalse
 \begin{proposition}
 \label{prop:fastgain}
 Assume a role assignment $\role$ with optimal centroids $\centroid$. 
@@ -163,6 +166,7 @@ To conclude, we have
 \]
 which proves the identity.
 \end{proof}
+\fi
 
 
 
@@ -170,8 +174,10 @@ which proves the identity.
 The inner loop of \alggreedy
 \emph{(}{\bf foreach} loop in Algorithm~\ref{alg:greedy}\emph{)} 
 requires time $\bigO{k^2 n + km}$.
+\label{prop:greedytime}
 \end{proposition}
 
+\iffalse
 \begin{proof}
 According to Proposition~\ref{prop:fastgain}, computing the gain can be done in time $\bigO{k + \dg{v}}$. 
 Consequently, computing $j^*$ requires time $\bigO{k^2 + k\dg{v}}$. 
@@ -179,3 +185,4 @@ Updating the profiles, the centroids, and the role assignment $\role$
 can be done in time $\bigO{k + \dg{v}}$. 
 Summing over all the vertices gives us a total running time of $\bigO{k^2 n + km}$.
 \end{proof}
+\fi
