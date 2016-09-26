@@ -1,4 +1,4 @@
-\section{Preliminaries and\\problem definition}
+\section{Preliminaries and problem definition}
 \label{sec:prel}
 
 We consider a graph $G = (V, E)$ 
@@ -37,8 +37,7 @@ For simplicity of notation we write
 \dist{\prof{v; \role},\centroid} = 
 \norm{\prof{v; \role} - \centroid}_2.
 \]
-The role-mining problem we consider
-can now be formulated as follows.
+We can now formulate our our role-mining problem.
 
 \begin{problem}
 \label{problem:role-mining}
@@ -53,8 +52,7 @@ that minimize the cost
 \]
 \end{problem}
 
-We can show that the \prbrm problem is  \np-hard.
-The proof of the following proposition is obtained 
+We can show that the \prbrm problem is  \np-hard
 by a reduction from the \tmatch problem.
 The proof is given in the appendix.
 
@@ -82,9 +80,9 @@ We can show that for the \prbrm problem
 only the first part of the corresponding property holds.
 Indeed, for a \emph{fixed} role assignment $\role$
 the profiles of all vertices are also fixed.
-The representative vector of a role
+The representative vector of a role $r$
 can then be easily computed as the centroid
-of the profiles of all vertices that are assigned to that role. 
+of the profiles of all vertices having the role $r$. 
 
 On the other hand, 
 when the role centroids $\centroid_1, \ldots, \centroid_k$ are fixed
@@ -104,11 +102,11 @@ that minimizes the cost function
 \]
 \end{problem}
 
-The next proposition is proven in the appendix.
+%The next proposition is proven in the appendix.
 
 \begin{proposition}
 \label{proposition:np-fixed}
-Deciding whether an instance of \prbrmfixed has a zero-cost solution 
+Deciding whether \prbrmfixed has a zero-cost solution 
 is an \np-complete problem. 
 \end{proposition}
 
@@ -129,8 +127,8 @@ the hardness result obtained for \prbrmfixed is much stronger
 than the one obtained for \prbrm.
 This could be just an artifact of our proof techniques
 and it may be the case that \prbrm is also a hard problem to approximate. 
-As we do not provide an approximation algorithm for \prbrm in this paper, 
-its approximability is left as an open problem.
+%As we do not provide an approximation algorithm for \prbrm in this paper, 
+%its approximability is left as an open problem.
 
 
 

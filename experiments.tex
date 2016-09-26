@@ -10,7 +10,7 @@ will become publicly available.\footnote{{\sc url} not provided for blind review
 %[[77, 14, 0], [6, 7, 1], [6, 12, 9]]
 
 \spara{Experimental setup:}
-We use 10 graphs of different sizes and densities, described in Table~\ref{table:datasets}.
+We use 10 graphs of different sizes and densities. %, described in Table~\ref{table:datasets}.
 The first three datasets, \karate, \dolphins, and \lesmis are obtained from UCIrvine Network Data
 Repository.\footnote{\url{http://networkdata.ics.uci.edu/index.php}}
 We create a synthetic dataset, \synth, with 3 groups of vertices, say $V_1$,
@@ -36,6 +36,7 @@ Repository.\footnote{\url{http://snap.stanford.edu/data}}
 \end{itemize}
 \fi
 
+\iffalse
 \begin{table}[th!]
 \centering
 \caption{Basic characteristics of the datasets. The second last column depicts the number of unique vertex degrees, the last column depicts the average degree.}
@@ -57,6 +58,7 @@ Name&dir.&$\abs{V}$&$\abs{E}$& $\#\,\dg{}$ & $\overline{\dg{}}$\\
 \end{tabular*}
 \label{table:datasets}
 \end{table}
+\fi
 
 For each dataset, except for \synth and \collab,
 we apply \algperfect, \alggreedy, and \algiterative. 
@@ -69,7 +71,7 @@ We consider 4 different variants:
 ($ii$) \alginitdeg, vertices are sorted based on degree, and split into equal-size clusters,
 ($iii$) \alginitrnd, roles are assigned randomly, 
 ($iv$) \alginitkm, where we use the assignment given by \algiterative. 
-The experiments conducted on \synth and \collab are described in the next section.
+%The experiments conducted on \synth and \collab are described in the next section.
 
 To speed-up the computation of \alggreedy, we implement the following
 heuristic: if the role of a vertex has not changed during the 3 last iterations,
@@ -172,22 +174,39 @@ the same role.
 
 \begin{table}[ht!]
 \centering
-\caption{Costs of role assignments, normalized by $\cost{\role'}$, where $\role'(v) = 0$ for every $v$.
+\caption{Columns 3--7 show costs of role assignments, normalized by $\cost{\role'}$, where $\role'(v) = 0$ for every $v$.
 Lower values are better.
+Columns 8--12 show Kendall-$\tau$ statistics between role assignments and vertex degree.
 The parameter $k$ stands for the number of roles. \algkm depicts \algiterative, while the remaining columns
 depicts \alggreedy with different initializations.}
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r@{\hspace{6mm}}r@{\hspace{6mm}}r r r r} 
+\setlength{\tabcolsep}{2pt}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r @{\hspace{4mm}} r r r r r} 
 \toprule
-Name& $k$ & \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\ 
+& &
+\multicolumn{5}{l}{Costs of role assignments} &
+\multicolumn{5}{l}{Kentall-$\tau$ vs. vertex degree}
+\\
+\cmidrule(r{4mm}){3-7}
+\cmidrule{8-12}
+Name& $k$ & \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm  
+& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\ 
 \midrule
-{\karate} &4&  0.103 & 0.097 & 0.141 & 0.125&0.089 \\
-{\dolphins} &4& 0.306 & 0.253 & 0.219 & 0.255&0.213 \\
-{\lesmis} &4& 0.142 & 0.124 & 0.121 & 0.133&0.118 \\
-{\facebook} &10& 0.056 & 0.043 & 0.043 & 0.043&0.039 \\
-{\enron} &10& 0.064 & 0.021 & 0.019 & 0.019&0.019 \\
-{\EUall} &10& 0.097 & 0.029 & 0.024 & 0.035&0.028 \\
-{\dblp} &10& 0.178 & 0.059  & 0.065 & 0.059&0.054 \\
-{\youtube} &10& 0.202 & 0.029  & 0.029 & 0.029&0.029 \\
+{\karate} &4&   .103 &  .097 &  .141 &  .125& .089 
+& .449 & .794 & .501 &  .636& .636 \\
+{\dolphins} &4&  .306 &  .253 &  .219 &  .255& .213 
+& .123 & .661 & .672 &  .598& .744 \\
+{\lesmis} &4&  .142 &  .124 &  .121 &  .133& .118 
+& .228 & .711 & .729 &  .679& .734 \\
+{\facebook} &10&  .056 &  .043 &  .043 &  .043& .039 
+& .052 & .707 & .714 &  .741& .739 \\
+{\enron} &10&  .064 &  .021 &  .019 &  .019& .019 
+& .007 & .467 & .474 &  .459& .467 \\
+{\EUall} &10&  .097 &  .029 &  .024 &  .035& .028 
+& .003 & .327 & .203 &  .275& .352 \\
+{\dblp} &10&  .178 &  .059  &  .065 &  .059& .054 
+& .008 & .596 & .559 &  .564& .536 \\
+{\youtube} &10&  .202 &  .029  &  .029 &  .029& .029 
+& .004 & .467 & .454 &  .404& .465  \\
 \bottomrule
 \end{tabular*}
 \label{table:score}
@@ -202,7 +221,7 @@ while 0 implies that the assignments are independent.}
 The index implies that while the obtained results all correlate positively they do differ.
 This puts extra emphasis on a good initialization of \alggreedy.
 
-\begin{table}[thb!]
+\begin{table}[t!]
 
 \caption{Adjusted Rand indices between different initializations of \alggreedy. }
 \setlength{\tabcolsep}{0pt}
@@ -231,16 +250,16 @@ $\nicefrac{\alginitrnd}{\alginitkm}$ \\
 \label{table:randgreedy}
 \end{table}
 
-The left plot in Figure~\ref{fig:facebook} shows the cost as a function of $k$
-for \facebook dataset.  Naturally, the cost decreases as we increase $k$. The
-change is more rapid for small values of $k$, and evens out for large values.
+%The left plot in Figure~\ref{fig:facebook} shows the cost as a function of $k$
+%for \facebook dataset.  Naturally, the cost decreases as we increase $k$. The
+%change is more rapid for small values of $k$, and evens out for large values.
 
 Let us now study how well the role assignment correlates with vertex degree.  
 Since the
 roles are symbolic, we sort the roles based on average degree, and compared
-the roles and degrees using Kendall-$\tau$.\footnote{We use the $b$ variant
+the roles and degrees using Kendall-$\tau$.\footnote{We use the $b$-variant
 to accommodate the ties.} We see from the results given in
-Table~\ref{table:kendaltau} that there is significant correlation between the
+Table~\ref{table:score} that there is significant correlation between the
 degrees and the role assignment. Naturally, this is partly due to how we sort
 the roles.  However, there are some subtle differences. The coefficients depend
 on the dataset, for example, \EUall obtains one of the lowest values. There is
@@ -249,6 +268,7 @@ ranks with weak or almost no correlation with the degree. This advances further
 the notion that \algiterative gets stuck in local minimum, and should not be used
 alone.
 
+\iffalse
 \begin{table}[htb!]
 \centering
 %\caption{Kendall-$\tau$ statistics between degree-based ranking and role-based ranking. Role-based ranking is implemented by our algorithms with different initialization. \textsc{deg} for degree based initial role assignment, \textsc{one} for assigning one role for all node during initialization, \textsc{rnd} for assigning random roles, and \textsc{i+g} for k-means based initialization.}
@@ -276,45 +296,59 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 
 \label{table:kendaltau}
 \end{table}
+\fi
 
 
 
 \spara{Running time:}
 Let us now consider the computational complexity of the algorithms.  We present the
-number of iterations needed for convergence in Table~\ref{table:iterations},
-and the running times in Table~\ref{table:time}. The number of required
+number of iterations needed for convergence and the running times in Table~\ref{table:iterations}.
+The number of required
 iterations is modest, especially when compared to the size of the input graph.
 The running times are manageable: we should point out that we implemented
 \alggreedy using Python, an implementation with a more efficient programming
 platform should make the algorithm more user-friendly, especially for large
-graphs. As expected, the running times increase as we increase the number of roles; 
-see the right plot in Figure~\ref{fig:facebook}.
+graphs. % As expected, the running times increase as we increase the number of roles; see the right plot in Figure~\ref{fig:facebook}.
 
 
 \begin{table}[htb!]
 \centering
-\caption{Total number of iterations required for convergence.
+\caption{Total number of iterations required for convergence, and evaluation time.
 \algkm depicts \algiterative, while the remaining columns
 depicts \alggreedy with different initializations.
 }
-
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r}
+\setlength{\tabcolsep}{0pt}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r r r r r}
 \toprule
-Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\ 
+& \multicolumn{5}{l}{Number of iterations} 
+& \multicolumn{5}{l}{Evaluation time} \\
+\cmidrule(r){2-6}
+\cmidrule{7-11}
+Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm  
+& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\ 
 \midrule
-{\karate}   &  2 & 2   & 5   & 15  & 5 \\
-{\dolphins} &  2 & 3   & 5   & 12  & 5 \\
-{\lesmis}   &  2 & 14  & 16  & 13  & 5 \\
-{\facebook} &  2 & 85  & 92  & 131 & 73 \\
-{\enron}    &  3 & 180 & 220 & 215 & 124 \\
-{\EUall}    &  3 & 719 & 404 & 2921& 122 \\
-{\dblp}     &  3 & 17  & 41  & 56  & 53 \\
-{\youtube}  &  4 & 462 & 413 & 471 & 552 \\
+{\karate}   &  2 & 2   & 5   & 15  & 5
+&2ms  &5ms    &14ms   & 19ms   &14ms \\
+{\dolphins} &  2 & 3   & 5   & 12  & 5
+&4ms  &14ms   &22ms   & 32ms   &29ms \\
+{\lesmis}   &  2 & 14  & 16  & 13  & 5
+&5ms  &46ms   &48ms   & 29ms   &36ms \\
+{\facebook} &  2 & 85  & 92  & 131 & 73
+&0.4s &39s    &41s    & 53s    &39s \\
+{\enron}    &  3 & 180 & 220 & 215 & 124
+&1.9s &7m6s   &9m4s   & 9m5s   &7m40s \\
+{\EUall}    &  3 & 719 & 404 & 2921& 122
+&21s  &49m3s  & 21m4s & 1h45m  &10m22s \\
+{\dblp}     &  3 & 17  & 41  & 56  & 53
+&21s  &1h21m  &22m3s  & 41m6s  &29m57s \\
+{\youtube}  &  4 & 462 & 413 & 471 & 552 
+& 87s &12h10m &7h30m  & 16h10m &14h52m  \\
 \bottomrule
 \end{tabular*}
 \label{table:iterations}
 \end{table}
 
+\iffalse
 \begin{table}[htb!]
 \centering
 \caption{Evaluation time of algorithms.
@@ -333,17 +367,20 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 {\enron}    &1.9s &7m6s   &9m4s   & 9m5s   &7m40s \\
 {\EUall}    &21s  &49m3s  & 21m4s & 1h45m  &10m22s \\
 {\dblp}     &21s  &1h21m  &22m3s  & 41m6s  &29m57s \\
+
 {\youtube}  & 87s &12h10m &7h30m  & 16h10m &14h52m  \\
 \bottomrule
 \end{tabular*}
 
 \label{table:time}
 \end{table}
+\fi
 
 
 
 
 
+\iffalse
 \begin{figure}[htb!]
 \begin{tikzpicture}
 \begin{axis}[xlabel={number of roles $k$}, ylabel= {$\cost{\role} / \cost{\role'}$},
@@ -409,7 +446,9 @@ Name& \algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 The cost is normalized by $\cost{r'}$ such that $r'(v) = 0$, for every $v$, that is, $r'$ assigns the same role to every vertex.}
 \label{fig:facebook}
 \end{figure}
+\fi
 
+\iffalse
 \begin{figure}[ht!]
 \pgfplotsset{every axis plot post/.append style= {line width=0.5pt}}
 \begin{tikzpicture}
@@ -445,23 +484,24 @@ Each line represents the number of neighbors of a vertex $v$ as a
 function of the neighbor role. The three groupings are based on the role of $v$.}
 \label{fig:collab}
 \end{figure}
+\fi
 
 
 \spara{Case study of the collaboration network:}
 Next we consider collaboration network \collab. Here we apply \alginitdeg
-with $k = 3$. The obtained profiles are visualized in Figure~\ref{fig:collab}.
+with $k = 3$.
+%The obtained profiles are visualized in Figure~\ref{fig:collab}.
 The obtained centroids are
 $\centroid_1 = (0.65, 0.76, 0.58)$, $\centroid_2 = (2.06, 1.7, 1.55)$, $\centroid_3 = (5.2, 5.1, 1.8)$, 
 that is, the researchers with the 3rd role have many co-authors while the researchers with the 1st role
 have with limited number of co-authors. 
-Finally, the researchers with the middle role are somewhere between
+The researchers with the middle role are somewhere between
 the two classes. 
-To assess the results obtained on this dataset,
-we compare the roles discovered by our algorithm
+To assess the obtained results,
+we compared the roles discovered by our algorithm
 with a partitioning obtained by the job title of the researchers.
 We use three classes: professors, senior researchers and staff, and PhD students and junior postdocs. 
-The adjusted Rand index between the two partitionings is $0.387$.\footnote{Value 1 means complete agreement, 
-while 0 means that the partionings are indepedent.}
+The adjusted Rand index between the two partitionings is $0.387$. %\footnote{Value 1 means complete agreement, while 0 means that the partionings are indepedent.}
 We should point that the seniority of a researcher is not always reflected in the collaboration graph: 
 there are many senior reseachers with few collaborators. 
 
@@ -482,25 +522,37 @@ is not able to process \youtube dataset due to memory consumption.
 
 \caption{Comparison of \algrolx and \alggreedy. 
 Columns 2--3 depict obtained costs, normalized by $\cost{\role'}$, where $\role'(v) = 0$ for every $v$.
-The remaining columns depict adjusted Rand index of \algrolx versus \alggreedy with different initializations.}
+Columns 5--8 depict adjusted Rand index of \algrolx versus \alggreedy with different initializations.
+The remaining columns show classification accuracy used roles as features. }
 \setlength{\tabcolsep}{0pt}
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r r} 
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}l r r r r r r r r r r r r r} 
 \toprule
-&\multicolumn{2}{c}{$\cost{\role} / \cost{\role'}$}&&\multicolumn{4}{c}{Adj.\ Rand vs.\ \algrolx}\\
-\cmidrule{2-3} \cmidrule{5-8}
-Name& \algrolx & \textsc{r+g} && \alginitdeg & \alginitone & \alginitrnd & \alginitkm\\
+&\multicolumn{2}{l}{$\cost{\role} / \cost{\role'}$}&&\multicolumn{4}{l}{Rand vs.\ \algrolx} &
+\multicolumn{6}{l}{Classification accuracy}
+\\
+\cmidrule{2-3} \cmidrule{5-8} \cmidrule{9-14}
+Name& \algrolx & \textsc{r+g} && \alginitdeg & \alginitone & \alginitrnd & \alginitkm
+& \algrolx &\algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\ 
 \midrule
-{\karate}  &0.217&0.124& &0.292&0.068&0.129&0.259\\
-{\dolphins}&0.457&0.302& &0.187&0.207&0.236&0.273\\
-{\lesmis}  &0.305&0.161& &0.298&0.358&0.135&0.336\\
-{\facebook}&0.285&0.056& &0.079&0.108&0.111&0.073\\
-{\enron}   &0.467&0.019& &0.058&0.055&0.053&0.054\\
-{\EUall}   &0.438&0.029& &0.251&0.259&0.237&0.281\\
-{\dblp}    &0.509&0.061& &0.655&0.258&0.349&0.359\\
+{\karate}  & .217& .124& & .292& .068& .129& .259
+& .735 & .912& .647 & .676 &  .412& .823 \\
+{\dolphins} & .457& .302& & .187& .207& .236& .273
+& .613 & .903& .662 & .661 &  .565& .662 \\
+{\lesmis}  & .305& .161& & .298& .358& .135& .336
+& .714 & .948& .779 & .741 &  .831& .741 \\
+{\facebook}&.285&.056& &.079&.108&.111&.073
+&.887 &.884&.656 &.691 & .673&.675 \\
+{\enron}   & .467& .019& & .058& .055& .053& .054
+& .847 & .876& .589 & .584 &  .579& .567 \\
+{\EUall}   & .438& .029& & .251& .259& .237& .281
+& .896 & .875& .669 & .833 &  .689& .791 \\
+{\dblp}    & .509& .061& & .655& .258& .349& .359
+& .881 & .812& .906 & .623 &  .667& .658 \\
 \bottomrule
 \end{tabular*}
 \label{table:rolx}
 \end{table}
+
 
 We first observe that role assignments returned by \algrolx have a high cost.
 This is a natural result, since \algrolx does not optimize our objective.
@@ -512,11 +564,12 @@ As a sanity check, we construct a classifier predicting the role of a vertex
 based on its features. For \algiterative and \alggreedy we use the profiles as
 features, and for \algrolx we use the feature vectors. We use decision tree
 classifier with 10-fold cross-validation, and the accuracy results are given in
-Table~\ref{table:classification}. We see that all methods perform well, note
+Table~\ref{table:rolx}. We see that all methods perform well, note
 that 10 classes for large datasets and 4 classes for small datasets.  We
 observe that the accuracy is generally higher for \algiterative and \algrolx
 than for \alggreedy.
 
+\iffalse
 \begin{table}[htb!]
 \centering
 
@@ -540,6 +593,7 @@ Name& \algrolx &\algkm & \alginitdeg & \alginitone & \alginitrnd & \alginitkm \\
 
 \label{table:classification}
 \end{table}
+\fi
 
 
 

@@ -1,3 +1,125 @@
+\begin{proposition}
+\label{prop:fastgain}
+Assume a role assignment $\role$ with optimal centroids $\centroid$.
+Let $v$ be a vertex and $j$ be an integer.
+Let $i = \role(v)$.
+Define $n_\ell = \abs{\set{u \in V ; \role(u) = \ell}}$ to be the number of vertices having role $\ell$.
+Define $d_\ell = \abs{\set{(v, w) \in E ; \role(w) = \ell}}$ to be the number of neighbors of $v$ having role $\ell$.
+
+Define a new role assignment $\role'$ obtained from $\role$ by setting $\role'(v) = j$.
+Let $n'_\ell = \abs{\set{u \in V ; \role'(u) = \ell}}$.
+Let $\centroid'$ be the optimal centroids with respect to $\role'$.
+Let $\centroid^*$ be the ``intermediate'' centroids, where we have moved $v$ from $i$ to $j$ but we have not
+updated the profiles of neighbors of $v$.  Then
+\[
+\begin{split}
+    \gain{v, j} = 
+    & - n_i\norm{\centroid_i}^2 + n_i'\norm{\centroid_i^*}^2 - n_j\norm{\centroid_j}^2 + n_j'\norm{\centroid_j^*}^2 \\
+    & + \sum_{(v, w) \in E} 2\prof{w, \role}_i - 2\prof{w, \role}_j  - 2  \\
+    & - \sum_{\ell = 1}^k 2d_\ell \spr{(\centroid_\ell^*)_j  - (\centroid_\ell^*)_i - d_\ell / n_\ell' }.  \\
+\end{split}
+\]
+\end{proposition}
+
+\begin{proof}[Proof of Proposition~\ref{prop:fastgain}]
+Since $\centroid$ is the average of $x_i$,
+a known identity $\sum (x_i - \centroid)^2 = \sum (x_i^2 - \centroid^2)$ allows us to 
+rewrite the gain as
+\[
+\begin{split}
+	\gain{v, j} = & \sum_{u \in V} \norm{\prof{u, \role}}^2 -  \norm{\prof{u, \role'}}^2 \\
+	& - \sum_{\ell = 1}^k n_\ell \norm{\centroid_\ell}^2 -  n_\ell' \norm{\centroid_\ell'}^2.
+\end{split}
+\]
+Let us define $B(w)$ to be a term in the first sum.
+Let us abbreviate $\prof{w, \role}$ as $\prof{w}$.
+Then $B(w) \neq 0$ if and only if $(v, w) \in E$,
+and in such a case it is equal to
+\[
+\begin{split}
+	B(w) & = \prof{w}_i^2 - (\prof{w}_i - 1)^2 + \prof{w}_j^2 - (\prof{w}_j + 1)^2 \\
+	& = 2\prof{w}_i - 2\prof{w}_j  - 2.
+\end{split}
+\]
+We now consider the second sum, which we will rewrite as
+\[
+	\sum_{\ell = 1}^k n_\ell \norm{\centroid_\ell}^2 -  n_\ell' \norm{\centroid_\ell^*}^2 +
+	\sum_{\ell = 1}^k n_\ell' \norm{\centroid_\ell^*}^2 -  n_\ell' \norm{\centroid_\ell'}^2.
+\]
+The first sum, which we will denote by $A$ is equal to
+\[
+	A = n_i\norm{\centroid_i}^2 - n_i'\norm{\centroid_i^*}^2 + n_j\norm{\centroid_j}^2 - n_j'\norm{\centroid_j^*}^2. 
+\]
+
+Let us write $R(\ell)$ to be a term in the second sum. We can express this term as
+\[
+\begin{split}
+	R(\ell) & = n_\ell'\spr{(\centroid_\ell^*)_i^2 - ((\centroid_\ell^*)_i - \gamma_\ell)^2 + (\centroid_\ell^*)_j^2 - ((\centroid_\ell^*)_j +  \gamma_\ell)^2} \\
+	        & = 2d_\ell \spr{(\centroid_\ell^*)_i - (\centroid_\ell^*)_j -  \gamma_\ell}, \quad \text{where} \quad \gamma_\ell = d_\ell / n_\ell'.
+\end{split}
+\]
+To conclude, we have
+\[
+	\gain{v, j} = - A + \sum_{(v, w) \in E} B(w) - \sum_{\ell = 1}^k R(\ell),
+\]
+which proves the identity.
+\end{proof}
+
+
+
+\begin{proof}[Proof of Proposition~\ref{prop:greedytime}]
+According to Proposition~\ref{prop:fastgain}, computing the gain can be done in time $\bigO{k + \dg{v}}$. 
+Consequently, computing $j^*$ requires time $\bigO{k^2 + k\dg{v}}$. 
+Updating the profiles, the centroids, and the role assignment $\role$
+can be done in time $\bigO{k + \dg{v}}$. 
+Summing over all the vertices gives us a total running time of $\bigO{k^2 n + km}$.
+\end{proof}
+
+%% END
+
+\begin{proof}[Proof of Proposition~\ref{prop:exacttime}]
+At each iterations we increase the number of roles. Since the number of roles
+is at most $n$, we can have at most $\bigO{n}$ iterations.
+Next we analyze the running time of each iteration.
+
+Let us represent the profiles with sorted sparse lists. The size of a profile
+of a vertex $v$ is $\bigO{\dg{v}}$. The total time of constructing the profiles is
+then
+\[
+	\bigO{\sum_{v \in V} \dg{v} \log \dg{v}} \subseteq \bigO{m \log n}.
+\]
+
+Grouping based on profiles can be done by sorting the profiles in
+lexicographical order, and then comparing the consecutive profiles.
+
+We next analyze the time needed to sort the profiles in lexicographical order.
+Notice that comparing the profiles  $\prof{v}$ and $\prof{w}$ of two vertices $v$ and $w$
+cannot be done in constant time;
+instead time $\bigO{\min\{\dg{v}, \dg{w}\}}$ is required.
+
+Assume that merge sort is used for ordering the profiles lexicographically.
+Consider a counter $\Delta(v)$ defined as follows:
+initially, $\Delta(v)$ is set to $0$.
+Consider, that we are merging two sorted vertex lists during the merge sort.
+Assume that we are comparing vertex $v$ from the first list and vertex $w$ from the second list,
+and assume that we determine $\prof{v; \role} \leq \prof{w; \role}$.
+In such case, we increase $\Delta(v)$ by $\dg{v}$.
+If $\prof{v; \role} > \prof{w; \role}$, then we increase $\Delta(w)$ by $\dg{w}$.
+
+The increase of $\Delta(v)$ or $\Delta(w)$ is an upper bound for the
+time that is required for each comparison, so
+it immediately follows that sorting can be done in time $\bigO{\sum_u \Delta(u)}$.
+
+Note whenever we increase the counter, we always advance to the next vertex in
+the list. That is,
+each counter $\Delta(v)$ can be increased only once during a single merge,
+and each vertex participates only in $\bigO{\log n}$ merges.
+Consequently, $\Delta(v) \in \bigO{\dg{v} \log n}$.
+This implies that sorting the profiles using  merge sort requires time
+$\bigO{\sum_v \dg{v} \log n} = \bigO{m \log n}$.
+\end{proof}
+
+
 
 We will first prove Proposition~\ref{proposition:np}.
 

@@ -3,8 +3,8 @@
 
 Proposition~\ref{proposition:np-fixed} states that if we fix centroids, then
 the problem remains intractable, even worse it cannot be approximated. This is
-a blowback to the standard iterative heuristic, where one set of parameters is
-fixed while the other set of parameters is optimized.
+a blowback to the standard iterative heuristic, where we fix one set of parameters
+while optimizing the other set.
 
 However, if we were to fix the \emph{profiles}, then the optimization task
 transforms into a traditional clustering problem. Once, we have discovered a
@@ -12,13 +12,13 @@ role assignment, we can recompute the profiles, and repeat until we converge
 into a local minimum. This is exactly what we do in Algorithm~\ref{alg:iterative}.
 
 \begin{algorithm}
-\caption{$\algiterative(G, k)$, an iterative method for computing roles.
+\caption{$\algiterative(G, k)$, computes roles in iterative fashion.
 \algcluster is a standard clustering method.}
 \label{alg:iterative}
-$r_0 \define \algcluster(\dg{\cdot}, k)$ \;
+$r_0 \define \algcluster(\dg{\cdot}, k)$ ;
 $i \define 0$\;
 \While {cost decreases} {
-	$r_{i + 1} \define \algcluster(\prof{\cdot, r_i}, k)$ \;
+	$r_{i + 1} \define \algcluster(\prof{\cdot, r_i}, k)$ ;
 	$i \define i + 1$\;
 }
 \end{algorithm}
@@ -33,4 +33,4 @@ the number of edges. The $\bigO{kn}$ time is needed to initialize $n$ vectors of
 If the clustering algorithm allows to have sparse representation
 of the profiles, the processing time can be further reduced to $\bigO{m}$ time.
 Thus, the computational bottleneck is the clustering algorithm, as
-well as how many iterations we typically need to converge.
+well as how many iterations we typically need. % to converge.
