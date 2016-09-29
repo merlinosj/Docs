@@ -9,8 +9,8 @@ can be further supported by our ability to
 understand the \emph{role} of a single vertex 
 with respect to its local neighborhood, 
 or with respect to the whole network.
-Accordingly, 
-\emph{role discovery} 
+% Accordingly, 
+\emph{Role discovery} 
 has emerged as an important
 graph-mining task~\cite{gilpin2013guided,danilevsky2013entity,henderson2012rolx,rossi2015role,ruan2014simultaneous,yang2015network,zhao2013inferring}, 
 together with other standard graph-mining problems, 
@@ -69,8 +69,8 @@ while vertices with roles $B$ and $C$ are typically not connected to each other.
 
 In this paper we present a new approach to role discovery, 
 inspired by the definition of \emph{equitable partition} of vertices.
-A partition is equitable if the edges respect partition: 
-two groups of vertices in equitable partition are either fully connected or fully disconnected.
+% A partition is equitable if the edges respect partition: 
+% two groups of vertices in equitable partition are either fully connected or fully disconnected.
 As the original definition is too strict to be of use in real-world datasets, 
 we introduce a \emph{relaxation} that provides robustness and can tolerate noise in the data.
 In particular, we define an objective function that quantifies
@@ -97,14 +97,14 @@ is shown in Figure~\ref{figure:grooming}.
 In this example we search for $k=3$ roles. 
 The role assignment is depicted with different colors, 
 and the profile centroids for each role are shown in the bottom-right subplot.
-We see that the first role ({\tt purple}) corresponds to relatively isolated individuals, 
-while the other two roles ({\tt green} and {\tt orange}) correspond to more central ones. 
-Observe that the {\tt green} role is indeed different than the {\tt orange} role,
-as the individuals of the {\tt orange} role are connected to more individuals of the {\tt purple} role, 
+We see that the first role ({\em purple}) corresponds to relatively isolated individuals, 
+while the other two roles ({\em green} and {\em orange}) correspond to more central ones. 
+Observe that the {\em green} role is indeed different than the {\em orange} role,
+as the individuals of the {\em orange} role are connected to more individuals of the {\em purple} role, 
 and they are not connected to each other. 
 In the upper-right subplot we show a scatter-plot of role vs.\ degree. 
-We see that one of the two vertices with {\tt orange} role
-has smaller no larger degree than five of the vertices with {\tt green} role, 
+We see that one of the two vertices with {\em orange} role
+has smaller no larger degree than five of the vertices with {\em green} role, 
 indicating that the role assignment we discover cannot be explained solely by degree. 
 
 Our technical contributions are as follows: we formulate the optimization
