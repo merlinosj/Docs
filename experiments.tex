@@ -3,26 +3,26 @@
 
 In this section we present our experimental evaluation.  Our emphasis is to
 compare the performance of \alggreedy and \algiterative, as well as to compare
-the results with \algrolx~\cite{henderson2012rolx}.\footnote{We use an implementation by Circulo project, \url{https://github.com/lab41/circulo}.}
+the results with \algrolx~\cite{henderson2012rolx}.\!\footnote{We use an implementation by Circulo project, \url{https://github.com/lab41/circulo}.}
 All datasets and software used in the experimental evaluation
-will become publicly available.\footnote{{\sc url} not provided for blind review.}
+are publicly available.\!\footnote{http://research.ics.aalto.fi/dmg/}
 
 %[[77, 14, 0], [6, 7, 1], [6, 12, 9]]
 
 \spara{Experimental setup:}
 We use 10 graphs of different sizes and densities. %, described in Table~\ref{table:datasets}.
 The first three datasets, \karate, \dolphins, and \lesmis are obtained from UCIrvine Network Data
-Repository.\footnote{\url{http://networkdata.ics.uci.edu/index.php}}
+Repository.\!\footnote{\url{http://networkdata.ics.uci.edu/index.php}}
 We create a synthetic dataset, \synth, with 3 groups of vertices, say $V_1$,
 $V_2$, $V_3$, with $\abs{V_1} = 40$ and $\abs{V_2} = \abs{V_3} = 30$. 
 We connect $V_1$ and $V_3$ to $V_2$ and fully connect $V_3$. After this
 we apply noise by adding or removing an edge with a probability $p$. We vary $p$ from $0$ to $0.5$.
 We also consider a collaboration network within a research
-institute;\footnote{Name suppressed for blind review.} we add an edge
+institute;\footnote{Helsinki Institute of Information Technology} we add an edge
 between the researchers if they have a joint paper in DBLP.
 The
 remaining datasets are obtained from Standford SNAP
-Repository.\footnote{\url{http://snap.stanford.edu/data}}
+Repository.\!\footnote{\url{http://snap.stanford.edu/data}}
 \iffalse
 \begin{itemize}
 \item {\karate:} a social network of friendships between members of karate club at a US university in 1970.
